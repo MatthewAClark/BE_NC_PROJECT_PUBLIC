@@ -1,0 +1,23 @@
+{
+  "name": "northcoders-project-be",
+  "version": "1.0.0",
+  "description": "Northcoders Project",
+  "main": "listen.js",
+  "scripts": {
+    "test": "mocha spec/main.spec",
+    "start": "node listen.js",
+    "dev": "nodemon listen.js"
+  },
+  "author": "Matthew Clark",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
+    "chai": "^4.1.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.17.5",
+    "supertest": "^3.1.0"
+  }
+}
