@@ -4,9 +4,9 @@
   "description": "Northcoders Project",
   "main": "listen.js",
   "scripts": {
-    "test": "mocha spec/main.spec",
+    "test": "psql -f ./data/seed.test.sql && mocha ./spec",
     "start": "node listen.js",
-    "dev": "nodemon listen.js"
+    "dev": "psql -f ./data/seed.dev.sql && nodemon listen.js"
   },
   "author": "Matthew Clark",
   "license": "ISC",
@@ -18,6 +18,8 @@
     "express": "^4.16.3",
     "mocha": "^5.2.0",
     "nodemon": "^1.17.5",
+    "pg-promise": "^8.4.5",
+    "pgpromise": "^0.1.1",
     "supertest": "^3.1.0"
   }
 }

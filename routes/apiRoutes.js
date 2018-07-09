@@ -1,6 +1,6 @@
-const routes = {
-    fetchLiveStation: require('../controllers/station')
-}
+const {fetchLiveStation, fetchServices, fetchStationTimetable} = require('../controllers/station')
+
+   
 
 //const {main} = require('../controllers/index.js')
 
@@ -10,11 +10,11 @@ const router = express.Router();
 
 //router.get('/', main.fetchAll);
 
- router.get('/fetchStatus', routes.fetchLiveStation);
+ router.get('/livestation', fetchLiveStation);
 
-// router.use('/comments', routes.comments);
+router.get('/stationtimes', fetchStationTimetable);
 
-// router.use('/topics', routes.topics);
+ router.get('/fetchservices', fetchServices);
 
 // router.use('/articles', routes.articles)
 
