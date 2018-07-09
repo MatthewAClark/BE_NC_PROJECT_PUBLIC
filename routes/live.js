@@ -1,5 +1,4 @@
-const live = require('./live')
-const database = require('./db')
+const {fetchDepartures} = require('../controllers/departures')
 
    
 
@@ -9,11 +8,8 @@ const express  = require('express');
 const router = express.Router();
 
 
-//router.get('/', main.fetchAll);
+router.get('/departures', fetchDepartures);
 
-router.use('/live', live);
-
-router.use('/db', database)
 
 //  router.get('/livestation', fetchLiveStation);
 

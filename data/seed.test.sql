@@ -5,21 +5,20 @@ CREATE DATABASE train_database_test;
 
 CREATE TABLE train_schedule (
     train_Id SERIAL PRIMARY KEY,
-    train_status VARCHAR(10),
-    departure_station VARCHAR(20),
-    arrival_station VARCHAR(20),
+    train_uid VARCHAR(20),
+    departure_station VARCHAR(30),
+    arrival_station VARCHAR(30),
     departure_time TIME,
     arrival_time TIME,
-    train_operator VARCHAR(20)
+    train_operator VARCHAR(30)
 );
 
 
 CREATE TABLE delayed_train (
     incident_id SERIAL PRIMARY KEY,
     date_of_delay DATE,
-    actual_time_departure TIME,
-    expected_arrival_time TIME,
     actual_arrival_time TIME,
+    actual_departure_time TIME,
     train_id INT,
     FOREIGN KEY (train_Id) REFERENCES train_schedule(train_id) 
 );
@@ -31,10 +30,23 @@ CREATE TABLE delayed_train (
 --     FOREIGN KEY (incident_id) REFERENCES delayed_train(incident_id)
 -- );
 
-INSERT INTO train_schedule (departure_station, arrival_station, departure_time, arrival_time, train_operator)
-    VALUES ('Nalmouth', 'Clester', '16:05', '16:43', 'The Train Company'), ('Nalmouth', 'Clester', '16:45', '17:32', 'The Train Company');
+INSERT INTO train_schedule (train_uid, departure_station, arrival_station, arrival_time, departure_time, train_operator)
+    VALUES ('C77127', 'Exeter St Davids', 'Glasgow Central', '13:22', '13:24', 'CrossCountry'), 
+            ('C42224', 'Exeter St Davids', 'Barnstaple', '13:22', '13:27', 'Great Western Railway'),
+            ('C40170','Exeter St Davids', 'Plymouth', '13:26', '13:27', 'Great Western Railway'),
+            ('C43226', 'Exeter St Davids', 'Cardiff Central', '13:36', '13:38', 'Great Western Railway'),
+            ('C77350','Exeter St Davids', 'Plymouth', '13:43', '13:44', 'CrossCountry'),
+            ('C42376','Exeter St Davids', 'Exmouth', '13:48', '13:52', 'Great Western Railway'),
+            ('C40023', 'Exeter St Davids', 'London Paddington', '13:54', '13:57', 'Great Western Railway'),
+            ('C43171', 'Exeter St Davids', 'Paignton', '13:55', '13:58', 'Great Western Railway');
+            
 
-INSERT INTO delayed_train (date_of_delay, actual_time_departure, expected_arrival_time, actual_arrival_time, train_id)
-    VALUES ('09/07/18', '16:10', '16:48', '17:02', 1)
+INSERT INTO delayed_train (date_of_delay, actual_arrival_time, actual_departure_time, train_id)
+    VALUES ('09/07/18', '13:23', '13:24', 1),
+            ('09/07/18', '13:41', '13:42', 3),
+            ('09/07/18', '13:55', '13:56', 5),
+            ('09/07/18', '13:55','13:59', 6),
+            ('09/07/18', '13:58', '14:01', 7);
+            
 
 

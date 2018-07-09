@@ -1,5 +1,4 @@
-const live = require('./live')
-const database = require('./db')
+const {fetchSchedules, addSchedule} = require('../controllers/db')
 
    
 
@@ -9,13 +8,12 @@ const express  = require('express');
 const router = express.Router();
 
 
-//router.get('/', main.fetchAll);
+router.get('/schedules', fetchSchedules);
 
-router.use('/live', live);
 
-router.use('/db', database)
+  router.post('/schedules', addSchedule);
 
-//  router.get('/livestation', fetchLiveStation);
+  router.post('/delay', addDelay);
 
 // router.get('/stationtimes', fetchStationTimetable);
 

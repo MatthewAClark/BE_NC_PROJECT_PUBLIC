@@ -10,13 +10,14 @@ CREATE TABLE train_schedule (
     arrival_station VARCHAR(30),
     arrival_time TIME,
     departure_time TIME,
-    train_operator VARCHAR(30)
+    train_operator VARCHAR(30),
+    timetable URL(100)
 );
 
 
 CREATE TABLE delayed_train (
     incident_id SERIAL PRIMARY KEY,
-    date_of_delay DATE,
+    date_of_delay VARCHAR(10),
     expected_arrival_time TIME,
     expected_departure_time TIME,
     train_id INT,

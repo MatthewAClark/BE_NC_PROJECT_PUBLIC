@@ -10,10 +10,12 @@ const db = require('../config/index.js');
 
 // GET DATA 
 
-
+const getLiveService = (train_uid) => {
+  return  axios.get(`${api_url}/train/service/train_uid:${train_uid}/timetable.json?app_id=${api_id}&app_key=${api_key}`)
+}
 
 const getLiveStatus = (stationCode) => {
-  return  axios.get(`${api_url}/train/station/${stationCode}/live.json?app_id=${api_id}&app_key=${api_key}&train_status=passenger&darwin=true`)
+  return  axios.get(`${api_url}/train/station/${stationCode}/live.json?app_id=${api_id}&app_key=${api_key}&train_status=passenger&darwin=true&destination=BNP`)
   //return  axios.get(`${api_url}/train/station/${stationCode}/2018-07-09/10:00/timetable.json?app_id=${api_id}&app_key=${api_key}&train_status=passenger&darwin=true&destination=BNP&from_offset=PT24:00`)
   .then(res => res.data)
 //    .then(userData => res.status(200).send(userData))
@@ -44,4 +46,4 @@ const getStoredTrain = (train_uid) => db.oneOrNone(`SELECT * FROM train_schedule
 const getAllTrains = () => db.manyOrNone(`SELECT * FROM train_schedule`)
 
 
-module.exports = { getAllTrains, getLiveStatus, getStationTimetable, postTrain, getStoredTrain, postDelay}
+module.exports = { getAllTrains, getLiveStatus, getStationTimetable, postTrain, getStoredTrain, postDelay, getLiveService}
