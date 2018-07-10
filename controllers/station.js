@@ -3,6 +3,7 @@ const { getLiveService, postDelay, getAllTrains, getLiveStatus, getStationTimeta
 const util = require('util');
 const setTimeoutPromise = util.promisify(setTimeout);
 
+
 function fetchLiveStation(req, res) {
     if (req.query.stationCode) {
         getLiveStatus(req.query.stationCode)
@@ -38,7 +39,7 @@ function fetchLiveStation(req, res) {
                     // }
                 })
 
-                return res.status(200).send(userData)
+                return s
 
 
 
@@ -67,7 +68,10 @@ const timeDelay = function (num) {
             console.log(train.train_uid)
              if(train.departure_time === currentTime) {
                 getLiveService(train.train_uid) 
-                .then(status => console.log(status))
+                .then(status => {
+                status.forEach(station => {
+                    if(station.station_name)
+                })}
              }
         })
         

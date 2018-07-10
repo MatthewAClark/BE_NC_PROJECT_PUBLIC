@@ -31,5 +31,20 @@ app.get('/', (req, res) => {
 app.use((err, req, res, next) => {
    console.log(err)
   })
+
+
+  const fetchNewData = (help) => {
+      console.log('help')
+  }
+  var cron = require('node-cron');
+ 
+  cron.schedule('55,57,59 * * * *', function(){
+    console.log('running a task every odd minute');
+  });
+
+  cron.schedule('54,56,58 * * * *', function(){
+    console.log('running a task every even minute');
+  });
+  fetchNewData()
   
-  module.exports = app
+  module.exports = app, fetchNewData 
