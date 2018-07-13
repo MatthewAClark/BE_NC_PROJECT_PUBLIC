@@ -9,6 +9,8 @@ const cors = require('cors')
 // Connect to database
 const db = require('./config/index')
 
+const autoFetch = require('./modules/autofetch')
+
 
 // Define routes
 const apiRoutes = require('./routes/apiRoutes.js')

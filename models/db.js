@@ -5,6 +5,8 @@
 // const api_url = require('../config/api.config').api_url
 const db = require('../config/index.js');
 
+const getScheduleHour = () => db.manyOrNone(`SELECT * FROM train_schedule WHERE departure_time BETWEEN '13:00' AND '13:59'`)
+
 const getSchedule = (a,b) => db.manyOrNone(`SELECT * FROM train_schedule WHERE train_id = $2`, [a, b])
 
 const getSchedules = () => db.manyOrNone(`SELECT * FROM train_schedule`)
@@ -16,5 +18,5 @@ const postSchedule = (train_uid, departure_station, arrival_station, departure_t
 
 const postDelay = (date_of_delay, expected_arrival_time, expected_departure_time, train_id) => db.one(`INSERT INTO delays (date_of_delay, expected_arrival_time, expected_departure_time, train_id) VALUES ($1, $2, $3, $4) RETURNING *`, [date_of_delay, expected_arrival_time, expected_departure_time, train_id])
 
-module.exports = { getSchedules, postSchedule, postDelay, getDelays, getSchedule}
+module.exports = { getSchedules, postSchedule, postDelay, getDelays, getSchedule, getScheduleHour}
 

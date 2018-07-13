@@ -1,7 +1,12 @@
-const { getSchedule, getSchedules, postSchedule, postDelay, getDelays } = require('../models/db');
+const { getScheduleHour, getSchedule, getSchedules, postSchedule, postDelay, getDelays } = require('../models/db');
 
 function fetchSchedules(req, res) {
     getSchedules()
+        .then(data => res.status(200).send(data))
+}
+
+function fetchScheduleHour(req, res) {
+    getScheduleHour()
         .then(data => res.status(200).send(data))
 }
 
@@ -32,4 +37,4 @@ function fetchSchedule(req, res) {
         )
 }
 
-module.exports = { fetchSchedule, fetchSchedules, addSchedule, addDelay, fetchDelays };
+module.exports = { fetchScheduleHour, fetchSchedule, fetchSchedules, addSchedule, addDelay, fetchDelays };

@@ -31,14 +31,16 @@ CREATE TABLE delays (
 -- );
 
 INSERT INTO train_schedule (train_uid, departure_station, arrival_station, arrival_time, departure_time, train_operator)
-    VALUES ('C77127', 'Exeter St Davids', 'Glasgow Central', '13:22', '13:24', 'CrossCountry'), 
+    VALUES ('C77127', 'Exeter St Davids', 'Glasgow Central', '13:22', '21:11', 'CrossCountry'), 
             ('C42224', 'Exeter St Davids', 'Barnstaple', '13:22', '13:27', 'Great Western Railway'),
             ('C40170','Exeter St Davids', 'Plymouth', '13:26', '13:27', 'Great Western Railway'),
             ('C43226', 'Exeter St Davids', 'Cardiff Central', '13:36', '13:38', 'Great Western Railway'),
             ('C77350','Exeter St Davids', 'Plymouth', '13:43', '13:44', 'CrossCountry'),
             ('C42376','Exeter St Davids', 'Exmouth', '13:48', '13:52', 'Great Western Railway'),
             ('C40023', 'Exeter St Davids', 'London Paddington', '13:54', '13:57', 'Great Western Railway'),
-            ('C43171', 'Exeter St Davids', 'Paignton', '13:55', '13:58', 'Great Western Railway');
+            ('C43171', 'Exeter St Davids', 'Paignton', '13:55', '13:58', 'Great Western Railway'),
+            ('V01655', 'Exeter St Davids', 'Penzance', '14:05', '14:09', 'Great Western Railway');
+
             
 
 INSERT INTO delays (date_of_delay, expected_arrival_time, expected_departure_time, train_id)

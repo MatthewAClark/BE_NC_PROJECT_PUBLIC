@@ -2,7 +2,26 @@ process.env.NODE_ENV = 'test';
 const { expect } = require('chai');
 const request = require('supertest');
 const app = require('../server');
-const fetchNewData = require('../server');
+const autoFetch = require('../modules/autofetch');
+
+
+describe('/api/db/hour', () => {
+    it('GETs all scheduled data from the database', () => {
+        // runs mock server
+        return request(app)
+            // get request to mock server
+            .get('/api/db/schedulehour')
+            // supertest expect  - key on promise object
+            .expect(200)
+            .then((res) => {
+console.log(res.body)
+                // chai expect
+                // expect(res.body).to.be.an('array');
+                // expect(res.body.length).to.equal(8);
+            })
+
+    })
+})
 
 
 describe('/api/db/schedules', () => {
@@ -111,7 +130,7 @@ describe('/api/db/delays', () => {
 
     describe('test timeout output into get schedule function', () => {
         it.only('returns something', () => { 
-            expect(fetchNewData("help")).to.equal('')
+            expect(autoFetch()).to.equal('')
         })
     })
 })

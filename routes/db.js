@@ -1,4 +1,4 @@
-const {fetchSchedules, addSchedule, addDelay, fetchDelays, fetchSchedule} = require('../controllers/db')
+const {fetchScheduleHour, fetchSchedules, addSchedule, addDelay, fetchDelays, fetchSchedule} = require('../controllers/db')
 
    
 
@@ -9,7 +9,7 @@ const router = express.Router();
 
 
 router.get('/schedules', fetchSchedules);
-router.get('/schedule', fetchSchedule);
+router.get('/schedulehour', fetchScheduleHour);
 
 
 
