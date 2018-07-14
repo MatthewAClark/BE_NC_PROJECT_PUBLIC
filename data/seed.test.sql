@@ -19,6 +19,7 @@ CREATE TABLE delays (
     date_of_delay VARCHAR(10),
     expected_arrival_time TIME,
     expected_departure_time TIME,
+    cancelled BOOLEAN NOT NULL,
     train_id INT,
     FOREIGN KEY (train_Id) REFERENCES train_schedule(train_id) 
 );
@@ -31,7 +32,7 @@ CREATE TABLE delays (
 -- );
 
 INSERT INTO train_schedule (train_uid, departure_station, arrival_station, arrival_time, departure_time, train_operator)
-    VALUES ('C77127', 'Exeter St Davids', 'Glasgow Central', '13:22', '21:11', 'CrossCountry'), 
+    VALUES ('C77127', 'Exeter St Davids', 'Glasgow Central', '13:22', '22:32', 'CrossCountry'), 
             ('C42224', 'Exeter St Davids', 'Barnstaple', '13:22', '13:27', 'Great Western Railway'),
             ('C40170','Exeter St Davids', 'Plymouth', '13:26', '13:27', 'Great Western Railway'),
             ('C43226', 'Exeter St Davids', 'Cardiff Central', '13:36', '13:38', 'Great Western Railway'),
@@ -43,12 +44,12 @@ INSERT INTO train_schedule (train_uid, departure_station, arrival_station, arriv
 
             
 
-INSERT INTO delays (date_of_delay, expected_arrival_time, expected_departure_time, train_id)
-    VALUES ('2018-07-09', '13:23', '13:24', 1),
-            ('2018-07-09', '13:41', '13:42', 3),
-            ('2018-07-09', '13:55', '13:56', 5),
-            ('2018-07-09', '13:55','13:59', 6),
-            ('2018-07-09', '13:58', '14:01', 7);
+INSERT INTO delays (date_of_delay, expected_arrival_time, expected_departure_time, cancelled, train_id)
+    VALUES ('2018-07-09', '13:23', '13:24', false, 1),
+            ('2018-07-09', '13:41', '13:42', false, 3),
+            ('2018-07-09', '13:55', '13:56', false, 5),
+            ('2018-07-09', '13:55','13:59', false, 6),
+            ('2018-07-09', '13:58', '14:01', false, 7);
             
 
 
