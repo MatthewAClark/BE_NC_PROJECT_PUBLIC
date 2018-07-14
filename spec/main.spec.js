@@ -12,21 +12,22 @@ describe('/api/live/schedules', () => {
         // runs mock server
         return request(app)
             // get request to mock server
-            .get('/api/live/station/MRD')
+            .get('/api/live/station/exd')
             // supertest expect  - key on promise object
             .expect(200)
             .then((res) => {
-                console.log(res.body)
+
                 // chai expect
-                // expect(res.body).to.be.an('array');
-                // expect(res.body.length).to.equal(8);
+                //  expect(res.body).to.be.an('array');
+                expect(res.body.station_name).to.equal('Exeter St Davids');
+
             })
 
     })
 })
 
 describe('/api/route/MAN/?destination=LPY', () => {
-    it.only('GETs all live schedules from a station', () => {
+    it('GETs all live schedules from a station', () => {
         // runs mock server
         return request(app)
             // get request to mock server
@@ -34,29 +35,32 @@ describe('/api/route/MAN/?destination=LPY', () => {
             // supertest expect  - key on promise object
             .expect(200)
             .then((res) => {
-                console.log(res.body)
-                // chai expect
-                // expect(res.body).to.be.an('array');
-                // expect(res.body.length).to.equal(8);
+                //console.log(res.body)
+                expect(res.body.station_name).to.equal('Manchester Piccadilly');
+                expect(res.body.departures.all[0].destination_name).to.equal('Liverpool South Parkway')
             })
 
     })
 })
 
+describe('/api/route/MAN/?destination=LPY', () => {
+    it.only('GETs all live schedules for a service', () => {
+        // runs mock server
+        return request(app)
+            // get request to mock server
+            .get('/api/live/service/Y23259?date=2018-07-16')
+            // supertest expect  - key on promise object
+            .expect(200)
+            .then((res) => {
+                
+                // chai expect
+                 expect(res.body.stops).to.be.an('array');
+                 expect(res.body.stops.length).to.equal(12)
+                 expect(res.body.stops[0].station_name).to.equal('Manchester Airport')
+                // expect(res.body.length).to.equal(8);
+            })
 
-it('GETs all live schedules for a service', () => {
-    // runs mock server
-    return request(app)
-        // get request to mock server
-        .get('/api/live/service/C42224?date=2018-07-16')
-        // supertest expect  - key on promise object
-        .expect(200)
-        .then((res) => {
-            console.log(res.body)
-            // chai expect
-            // expect(res.body).to.be.an('array');
-            // expect(res.body.length).to.equal(8);
-        })
+    })
 
 })
 

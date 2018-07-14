@@ -1,5 +1,6 @@
 const { getSchedules } = require('../models/db.js');
-const { getTrainServiceLive } = require('../models/departures.js')
+const { getTrainServiceLive } = require(`../models/departures.${process.env.NODE_ENV}`)
+const { getServiceRoute } = require(`../models/departures.${process.env.NODE_ENV}`)
 const { getScheduleByTime } = require('../models/db.js');
 const { postDelay } = require('../models/db.js')
 const cron = require('node-cron');
@@ -54,7 +55,11 @@ const autoFetch = () => {
 
         })
 
-
+        cron.schedule(0, 0 , function () {
+            const dateTime = getCurrentDateTime()
+            
+            checkForDelays(dateTime.time, dateTime.date)
+        })
 
 }
 
@@ -63,7 +68,8 @@ const getCurrentDateTime = () => {
     const currDate = new Date()
     return {
         date: `${currDate.getFullYear()}-${(currDate.getMonth() + 1) < 10 ? '0' + (currDate.getMonth() + 1) : (currDate.getMonth() + 1)}-${currDate.getDate() < 10 ? '0' + currDate.getDate() : currDate.getDate()}`,
-        time: `${currDate.getHours() < 10 ? '0' + currDate.getHours() : currDate.getHours()}:${currDate.getMinutes() < 10 ? '0' + currDate.getMinutes() : currDate.getMinutes()}:00`
+        time: `${currDate.getHours() < 10 ? '0' + currDate.getHours() : currDate.getHours()}:${currDate.getMinutes() < 10 ? '0' + currDate.getMinutes() : currDate.getMinutes()}:00`,
+        day : currDate.getDay()
     }
 }
 
@@ -97,9 +103,48 @@ const checkForDelays = (departure_time, departure_date) => {
         })
 
 
-    // fetch live data for each service either by station or train uid
+}
 
-    // store train delays into delays db with departures id
+const checkSchedules = () => {
+// pull schedules for 24 hours
+getServiceRoute()
+.then(services => {
+    services.
+    getSchedules()
+    .then(result => {
+        // getLiveStatus(req.query.stationCode)
+        //     .then(userData => {
+
+
+        //         // Take a look at each service
+        //         userData.departures.all.forEach(dep => {
+        //             getStoredTrain(dep.train_uid)
+        //                 .then(train => {
+        //                     // Add service to database if not present
+        //                     if (!train) {
+        //                         postTrain(dep.train_uid, userData.station_name, dep.destination_name, dep.aimed_arrival_time, dep.aimed_departure_time, dep.operator_name)
+        //                             .then(result => {
+        //                                 if (dep.status === "LATE") {
+        //                                     addToDelay(result.id, userData.date, dep)
+
+        //                                 }
+        //                             })
+        //                     } else {
+        //                         if (dep.status === "LATE") {
+        //                             addToDelay(train.id, userData.data, dep)
+        //                         }
+        //                     }
+
+
+        //                 })
+
+    })
+})
+// pull schedule db 
+// add additional services
+
+// 
+
 }
 
 

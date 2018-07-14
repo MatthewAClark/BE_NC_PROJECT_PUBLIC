@@ -21,6 +21,8 @@
     "nodemon": "^1.17.5",
     "pg-promise": "^8.4.5",
     "pgpromise": "^0.1.1",
+    "promisify-node": "^0.5.0",
+    "readjson": "^1.1.4",
     "supertest": "^3.1.0"
   }
 }
