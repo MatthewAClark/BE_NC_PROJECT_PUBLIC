@@ -35,6 +35,7 @@ const fetchSchedulesByHour = () => {
 //                 // If there are schedules within that hour, create a schedular
 //                 if (schedulesByHour.length > 0) {
 const cronSchedule = (schedulesByHourArr) => {
+    let scheduling = []
     for (let i = 0; i < schedulesByHourArr.length; i++) {
 
 
@@ -48,10 +49,13 @@ const cronSchedule = (schedulesByHourArr) => {
         console.log(cronSchedule)
         //      scheduleByHour.push(currSchedule)
         //                     // Create schedule
-        cron.schedule(cronSchedule, function () {
+         scheduling.push(cron.schedule(cronSchedule, function () {
+            console.log('running new fetch')
             const dateTime = getCurrentDateTime()
-            checkForDelays(dateTime.time, dateTime.date)
-        })
+            checkLiveStatus(dateTime.time, dateTime.date)
+            .then(res => checkForDelays(res))
+            .then(res => console.log(res))
+        }), false)
 
         //                 }
     }
@@ -106,22 +110,8 @@ const checkLiveStatus = (departure_time, departure_date) => {
                 } )
                 }))
 
-                // scheduleStatus[i] =  getTrainServiceLive//(departures[i].train_uid, departure_date)
-                //      .then(status => {
-                //   //      console.log('status',status)
-                //          const stationData = status.data.stops.find(stop => {
-
-                //              return departures[i].departure_station === stop.station_name
-                //          })
-
-                // store data into delays table if train is delayed
-                // if (stationData.status === 'LATE') {
-                //      postDelay(departure_date, stationData.expected_arrival_time, stationData.expected_departure_time,
-                //    departures[i].train_id)
-                // }
-
-
-                //   })
+   
+              
 
             }
             return Promise.all(promises)

@@ -20,7 +20,7 @@ const getStationDepartures = (stationCode) => {
 }
 
 const getServiceRoute = (origin, destination) => {
-  return  axios.get(`${api_url}/train/station/${origin}/live.json?app_id=${api_id}&app_key=${api_key}&train_status=passenger&darwin=true&destination=${destination}&to_offset=PT23:59:00`)
+  return  axios.get(`${api_url}/train/station/${origin}/live.json?app_id=${api_id}&app_key=${api_key}&train_status=passenger&darwin=true&calling_at=${destination}&to_offset=PT23:59:00`)
   .then(res => res.data)
 //    .then(userData => res.status(200).send(userData))
 // return 'Hello'

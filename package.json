@@ -6,7 +6,8 @@
   "scripts": {
     "test": "psql -f ./data/seed.test.sql && mocha ./spec",
     "start": "node listen.js",
-    "dev": "psql -f ./data/seed.dev.sql && nodemon listen.js"
+   
+   "dev": "psql -f ./data/seed.dev.sql && node ./data/seed.dev.js && nodemon listen.js"
   },
   "author": "Matthew Clark",
   "license": "ISC",
