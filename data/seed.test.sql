@@ -17,6 +17,7 @@ CREATE TABLE train_schedule (
 CREATE TABLE delays (
     delay_id SERIAL PRIMARY KEY,
     date_of_delay VARCHAR(10),
+    expected_date_departure VARCHAR(10),
     expected_arrival_time TIME,
     expected_departure_time TIME,
     cancelled BOOLEAN NOT NULL,
@@ -32,24 +33,21 @@ CREATE TABLE delays (
 -- );
 
 INSERT INTO train_schedule (train_uid, departure_station, arrival_station, arrival_time, departure_time, train_operator)
-    VALUES ('C77127', 'Exeter St Davids', 'Glasgow Central', '13:22', '22:32', 'CrossCountry'), 
-            ('C42224', 'Exeter St Davids', 'Barnstaple', '13:22', '13:27', 'Great Western Railway'),
-            ('C40170','Exeter St Davids', 'Plymouth', '13:26', '13:27', 'Great Western Railway'),
-            ('C43226', 'Exeter St Davids', 'Cardiff Central', '13:36', '13:38', 'Great Western Railway'),
-            ('C77350','Exeter St Davids', 'Plymouth', '13:43', '13:44', 'CrossCountry'),
-            ('C42376','Exeter St Davids', 'Exmouth', '13:48', '13:52', 'Great Western Railway'),
-            ('C40023', 'Exeter St Davids', 'London Paddington', '13:54', '13:57', 'Great Western Railway'),
-            ('C43171', 'Exeter St Davids', 'Paignton', '13:55', '13:58', 'Great Western Railway'),
-            ('V01655', 'Exeter St Davids', 'Penzance', '14:05', '14:09', 'Great Western Railway');
+    VALUES ('Y12345', 'Manchester Piccadilly', 'Manchester Airport', '22:06', '22:07', 'Northern Rail'), 
+    ('Y23259', 'Manchester Piccadilly', 'Liverpool South Parkway', '22:06', '22:07', 'Northern Rail'),
+            ('Y23240', 'Manchester Piccadilly', 'Liverpool South Parkway', '08:12', '08:14', 'Northern Rail'),
+            ('Y23252','Manchester Piccadilly', 'Liverpool South Parkway', '11:07', '11:11', 'Northern Rail'),
+            ('Y23256', 'Manchester Piccadilly', 'Liverpool South Parkway', '11:37', '11:38', 'East Midlands Trains'),
+            ('C67109','Manchester Piccadilly', 'Liverpool South Parkway', '12:09', '12:11', 'Northern Rail'),
+            ('Y23260','Manchester Piccadilly', 'Liverpool South Parkway', '12:37', '12:38', 'East Midlands Trains'),
+            ('Y23260', 'Manchester Piccadilly', 'Liverpool South Parkway', '13:08', '13:09', 'Northern Rail');
 
             
 
-INSERT INTO delays (date_of_delay, expected_arrival_time, expected_departure_time, cancelled, train_id)
-    VALUES ('2018-07-09', '13:23', '13:24', false, 1),
-            ('2018-07-09', '13:41', '13:42', false, 3),
-            ('2018-07-09', '13:55', '13:56', false, 5),
-            ('2018-07-09', '13:55','13:59', false, 6),
-            ('2018-07-09', '13:58', '14:01', false, 7);
+INSERT INTO delays (date_of_delay, expected_date_departure, expected_arrival_time, expected_departure_time, cancelled, train_id)
+    VALUES ('2018-07-16', '2018-07-16', '22:16', '22:17', false, 1),
+            ('2018-07-16', '2018-07-16', '12:41', '12:42', false, 6);
+            
             
 
 

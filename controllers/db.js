@@ -17,7 +17,7 @@ function addSchedule(req, res) {
 }
 
 function addDelay(req, res) {
-    postDelay(req.body.date_of_delay, req.body.expected_arrival_time, req.body.expected_departure_time, req.body.train_id)
+    postDelay(req.body.date_of_delay, req.body.expected_date_departure, req.body.expected_arrival_time, req.body.expected_departure_time, req.body.train_id)
         .then(newDelay => res.status(201).send({ newDelay: newDelay }))
 }
 

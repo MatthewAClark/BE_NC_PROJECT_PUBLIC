@@ -20,8 +20,12 @@ const getServiceRoute = (origin, destination) => {
 const getTrainServiceLive = (train_uid, date) => {
  
     return new Promise(function (res, rej) {
-      if(train_uid !== 'Y23259' || date !=='2018-07-16') rej({ 'train_uid': train_uid, 'date': date})
+      if(train_uid === 'Y23259') {
       res({ data: readjson.sync(`./data/live.service.test.json`)})
+      }
+      if(train_uid === 'Y12345') {
+        res({ data: readjson.sync(`./data/live.service.test.1.json`)})
+        }
      
   
     })

@@ -2,9 +2,11 @@ process.env.NODE_ENV = 'test';
 const { expect } = require('chai');
 const request = require('supertest');
 const app = require('../server');
-const autoFetch = require('../modules/autofetch').autoFetch;
+const checkLiveStatus = require('../modules/autofetch').checkLiveStatus;
 const getCurrentDateTime = require('../modules/autofetch').getCurrentDateTime;
-const checkForDelays = require('../modules/autofetch').checkForDelays
+const checkForDelays = require('../modules/autofetch').checkForDelays;
+const fetchSchedulesByHour = require('../modules/autofetch').fetchSchedulesByHour
+const cronSchedule =  require('../modules/autofetch').cronSchedule
 
 // live api
 describe('/api/live/schedules', () => {
@@ -44,7 +46,7 @@ describe('/api/route/MAN/?destination=LPY', () => {
 })
 
 describe('/api/route/MAN/?destination=LPY', () => {
-    it.only('GETs all live schedules for a service', () => {
+    it('GETs all live schedules for a service', () => {
         // runs mock server
         return request(app)
             // get request to mock server
@@ -64,7 +66,31 @@ describe('/api/route/MAN/?destination=LPY', () => {
 
 })
 
+describe('', () => {
+    it('', () => {
+        fetchSchedulesByHour()
+        .then(res => {
+            expect(res[0][0].train_uid).to.equal('Y23240')
+            expect(res[4][0].train_uid).to.equal('Y23259')
+            return res
+        })
+        .then(res => {
+            cronSchedule(res)
+        })
+    })
+})
 
+describe('', () => {
+    it.only('', () => {
+        checkLiveStatus('22:07', '2018-07-16')
+        .then(res => {
+           checkForDelays(res)
+            .then(res => {
+                console.log(res)
+           })
+        })
+    })
+})
 
 // db
 
