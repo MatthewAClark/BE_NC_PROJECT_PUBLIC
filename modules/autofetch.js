@@ -44,14 +44,15 @@ const cronSchedule = (schedulesByHourArr) => {
 
         const hours = schedulesByHourArr[i].map(hours => Number(hours.departure_time.slice(0, 2)))
 
-        const cronSchedule = minutes.filter((elem, pos) => minutes.indexOf(elem) === pos).sort().join(',') + ` ${hours.filter((elem, pos) => hours.indexOf(elem) === pos)} * * *`
+        const cronSchedule = minutes.filter((elem, pos) => minutes.indexOf(elem) === pos).sort( (a,b) => a-b).join(',') + ` ${hours.filter((elem, pos) => hours.indexOf(elem) === pos)} * * *`
 
         console.log(cronSchedule)
         //      scheduleByHour.push(currSchedule)
         //                     // Create schedule
          scheduling.push(cron.schedule(cronSchedule, function () {
-            console.log('running new fetch')
+            
             const dateTime = getCurrentDateTime()
+            console.log(`running new fetch at: ${dateTime.time}`)
             checkLiveStatus(dateTime.time, dateTime.date)
             .then(res => checkForDelays(res))
             .then(res => console.log(res))
@@ -159,6 +160,15 @@ const checkForDelays = (stationData) => {
                 
 }
 
+const updateArrivalTimes = (stationData) => {
+    getScheduleByTrainUID(stationData.train_uid)
+    .then(res => {
+        if(res.arrival_time !== stationData.data.stops[stationData.data.stops.length-1]) {
+            console.log('here now')
+        }
+    })
+}
+
 // const checkSchedules = () => {
 // // pull schedules for 24 hours
 // getServiceRoute()
@@ -203,4 +213,4 @@ const checkForDelays = (stationData) => {
 
 
 
-module.exports = { checkLiveStatus, fetchSchedulesByHour, cronSchedule, checkForDelays }
+module.exports = { updateArrivalTimes, checkLiveStatus, fetchSchedulesByHour, cronSchedule, checkForDelays }

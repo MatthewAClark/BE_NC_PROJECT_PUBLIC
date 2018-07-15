@@ -1,4 +1,4 @@
-const {fetchServiceRoute, fetchStationDepartures, fetchTrainService} = require('../controllers/departures')
+const {fetchStationTimetable, fetchServiceRoute, fetchStationDepartures, fetchTrainService} = require('../controllers/departures')
 
    
 
@@ -13,6 +13,7 @@ router.get('/station/:id', fetchStationDepartures);
 router.get('/route/:id', fetchServiceRoute); 
   router.get('/service/:id', fetchTrainService);
 
+  router.get('/timetable/station/:id', fetchStationTimetable);
 // router.get('/stationtimes', fetchStationTimetable);
 
 //  router.get('/fetchservices', fetchServices);

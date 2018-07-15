@@ -1,4 +1,4 @@
-const { getScheduleByTime, getSchedule, getSchedules, postSchedule, postDelay, postCancelled, getDelays } = require('../models/db');
+const { putScheduleArrivalStationUpdate, putDelayArrivalTimeUpdate, putScheduleArrivalTimeUpdate, getScheduleByTime, getSchedule, getSchedules, postSchedule, postDelay, postCancelled, getDelays } = require('../models/db');
 
 function fetchSchedules(req, res) {
     getSchedules()
@@ -31,6 +31,21 @@ function fetchDelays(req, res) {
         .then(data => res.status(200).send(data))
 }
 
+function scheduleArrivalTimeUpdate(req, res) {
+    putScheduleArrivalTimeUpdate(req.body.arrival_time, req.params.id)
+        .then(data => res.status(200).send(data))
+}
+
+function scheduleArrivalStationUpdate(req, res) {
+    putScheduleArrivalStationUpdate(req.body.arrival_station, req.params.id)
+        .then(data => res.status(200).send(data))
+}
+
+function delayArrivalTimeUpdate(req, res) {
+    putDelayArrivalTimeUpdate(req.body.expected_arrival_time, req.params.id)
+        .then(data => res.status(200).send(data))
+}
+
 function fetchSchedule(req, res) {
     console.log('req params',req.query)
     getSchedule('train_id', req.query.train_id)
@@ -43,4 +58,4 @@ function fetchSchedule(req, res) {
         )
 }
 
-module.exports = {addCancelled, fetchScheduleByTime, fetchSchedule, fetchSchedules, addSchedule, addDelay, fetchDelays };
+module.exports = {delayArrivalTimeUpdate, scheduleArrivalStationUpdate, scheduleArrivalTimeUpdate, addCancelled, fetchScheduleByTime, fetchSchedule, fetchSchedules, addSchedule, addDelay, fetchDelays };
