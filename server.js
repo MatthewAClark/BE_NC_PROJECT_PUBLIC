@@ -26,7 +26,7 @@ app.use(cors());
 const{json} = require('body-parser');
 app.use(json());
 
-//API routes
+//API routes/
 app.use('/api', apiRoutes)
 
 // Server status
@@ -43,10 +43,10 @@ app.use((err, req, res, next) => {
    console.log(err)
   })
 
-  fetchSchedulesByHour()
-  .then(res => {
-      cronSchedule(res)
-  })
+//   fetchSchedulesByHour()
+//   .then(res => {
+//       cronSchedule(res)
+//   })
 
 
   module.exports = app 

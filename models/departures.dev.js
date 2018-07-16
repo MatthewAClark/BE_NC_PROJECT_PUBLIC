@@ -20,7 +20,7 @@ const getStationDepartures = (stationCode) => {
 }
 
 const getStationTimetable = (stationCode, destination) => {
-  return  axios.get(`${api_url}/train/station/${stationCode}/timetable.json?app_id=${api_id}&app_key=${api_key}&train_status=passenger&darwin=true&to_offset=PT23:59:00&calling_at=${destination}`)
+  return  axios.get(`${api_url}/train/station/${stationCode}/timetable.json?app_id=${api_id}&app_key=${api_key}&train_status=passenger&to_offset=PT23:59:00&calling_at=${destination}`)
   .then(res => res.data)
 //    .then(userData => res.status(200).send(userData))
 // return 'Hello'

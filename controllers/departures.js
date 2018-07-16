@@ -3,13 +3,13 @@ const {getStationTimetable, getServiceRoute, getStationDepartures, getTrainServi
 
 
 function fetchStationDepartures(req, res) {
-    getStationTimetable(req.params.id, req.query.destination)
+    getStationTimetable(req.params.id,)
         .then(departures => res.status(200).send(departures))
 
 }
 
 function fetchStationTimetable(req, res) {
-    getStationDepartures(req.params.id)
+    getStationTimetable(req.params.id,  req.query.destination)
         .then(departures => res.status(200).send(departures))
 
 }
