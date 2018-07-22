@@ -1,4 +1,18 @@
-const { getScheduleFromToDepTime, postNewSchedule, getAllSchedules, getScheduleById, getScheduleByDepTime } = require('../models/db.schedules')
+const {getSchedulesByRouteIDAndTime, getSchedulesByRouteID, getScheduleFromToDepTime, postNewSchedule, getAllSchedules, getScheduleById, getScheduleByDepTime } = require('../models/db.schedules')
+
+function fetchSchedulesByRouteID(req, res) {
+
+        if(req.query.departure_time_from) {
+
+                getSchedulesByRouteIDAndTime(req.params.route_id, req.query.departure_time_from, req.query.departure_time_to)
+                .then(data => res.status(200).send(data))
+        } else {
+                getSchedulesByRouteID(req.params.route_id)
+                .then(data => res.status(200).send(data)) 
+        }
+
+        
+}
 
 function fetchSchedules(req, res) {
 
@@ -32,4 +46,4 @@ function fetchAllSchedules(req, res) {
                         .then(data => res.status(200).send(data))
  }
 
-module.exports = { fetchSchedules, fetchAllSchedules, fetchScheduleById, addNewSchedule }
+module.exports = { fetchSchedulesByRouteID, fetchSchedules, fetchAllSchedules, fetchScheduleById, addNewSchedule }

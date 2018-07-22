@@ -45,11 +45,15 @@ CREATE TABLE delays (
 
 INSERT INTO train_stations (station_name, station_code, user_station_type)
     VALUES ('Liverpool South Parkway', 'LPY', 'home'),
-        ('Manchester Piccadilly', 'MAN', 'work');
+        ('Manchester Piccadilly', 'MAN', 'work'),
+        ('Leeds', 'LDS', 'family');
 
 INSERT INTO train_routes (starting_station, finish_station)
     VALUES (1, 2),
-    (2,1);
+    (2,1),
+    (2,3),
+    (3,2);
+
 -- INSERT INTO train_schedule (train_uid, departure_station, arrival_station, arrival_time, departure_time, train_operator)
 --     VALUES ('Y12345', 'Manchester Piccadilly', 'Manchester Airport', '22:06', '22:07', 'Northern Rail'), 
 --     ('Y23259', 'Manchester Piccadilly', 'Liverpool South Parkway', '22:06', '22:07', 'Northern Rail'),

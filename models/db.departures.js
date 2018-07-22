@@ -1,6 +1,6 @@
 const db = require('../config/index.js');
 
-const getAllDepartures = (user_starting_station_id, departure_time_from, departure_time_to) => db.manyOrNone(`SELECT * FROM train_stations INNER JOIN train_schedule ON train_schedule.user_finish_station=train_stations.station_id WHERE train_schedule.user_starting_station=$1 AND train_schedule.departure_time BETWEEN $2 AND $3`, [user_starting_station_id, departure_time_from, departure_time_to])
+const getAllDepartures = (route_id, departure_time_from, departure_time_to) => db.manyOrNone(`SELECT * FROM train_routes INNER JOIN train_schedule ON train_schedule.route_id=train_routes.route_id WHERE train_schedule.route_id=$1 AND train_schedule.departure_time BETWEEN $2 AND $3`, [route_id, departure_time_from, departure_time_to])
 
 // const getScheduleById = (train_id) => db.oneOrNone('SELECT * FROM train_schedule WHERE train_id = $1', [train_id])
 
