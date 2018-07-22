@@ -11,7 +11,7 @@ const api_url = require('../config/api.config').api_url
 // GET DATA 
 
 const getStationDepartures = (stationCode) => {
-  return  axios.get(`${api_url}/train/station/${stationCode}/live.json?app_id=${api_id}&app_key=${api_key}&train_status=passenger&darwin=true&to_offset=PT23:59:00`)
+  return  axios.get(`${api_url}/train/station/${stationCode}/live.json?app_id=${api_id}&app_key=${api_key}&train_status=passenger&darwin=true`)
   .then(res => res.data)
 //    .then(userData => res.status(200).send(userData))
 // return 'Hello'
@@ -28,8 +28,8 @@ const getStationTimetable = (stationCode, destination) => {
        
 }
 
-const getServiceRoute = (origin, destination) => {
-  return  axios.get(`${api_url}/train/station/${origin}/live.json?app_id=${api_id}&app_key=${api_key}&train_status=passenger&darwin=true&to_offset=PT23:59:00&calling_at=${destination}`)
+const getLiveRoute = (from, to) => {
+  return  axios.get(`${api_url}/train/station/${from}/live.json?app_id=${api_id}&app_key=${api_key}&train_status=passenger&darwin=true&to_offset=PT23:59:00&calling_at=${to}`)
   .then(res => res.data)
 //    .then(userData => res.status(200).send(userData))
 // return 'Hello'
@@ -42,4 +42,9 @@ const getTrainServiceLive = (train_uid, date) => {
 
 }
 
-module.exports = {getStationTimetable, getServiceRoute, getStationDepartures, getTrainServiceLive}
+const getStationData = (station_name) => {
+  return axios.get(`${api_url}/places.json?query=${station_name}&type=train_station&app_id=${api_id}&app_key=${api_key}`)
+
+}
+
+module.exports = {getStationData, getStationTimetable, getLiveRoute, getStationDepartures, getTrainServiceLive}

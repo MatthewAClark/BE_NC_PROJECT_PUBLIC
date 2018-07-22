@@ -10,7 +10,7 @@ const schedules2 = (readjson.sync(`./data/schedules.dev.2.json`))
 let promises = []
 schedules1.departures.all.forEach(elem => {
   promises.push(new Promise(function(res, rej) {
-    res(postNewSchedule(elem.train_uid, elem.origin_name, elem.destination_name, elem.aimed_departure_time, elem.aimed_arrival_time, elem.operator_name, 2, 1))
+    res(postNewSchedule(elem.train_uid, elem.origin_name, elem.destination_name, elem.aimed_arrival_time, elem.aimed_departure_time, elem.operator_name, 2))
 
   }))
 
@@ -18,7 +18,7 @@ schedules1.departures.all.forEach(elem => {
 
 schedules2.departures.all.forEach(elem => {
     promises.push(new Promise(function(res, rej) {
-      res(postNewSchedule(elem.train_uid, elem.origin_name, elem.destination_name, elem.aimed_departure_time, elem.aimed_arrival_time, elem.operator_name, 1, 2))
+      res(postNewSchedule(elem.train_uid, elem.origin_name, elem.destination_name, elem.aimed_arrival_time, elem.aimed_departure_time, elem.operator_name, 2))
   
     }))
   

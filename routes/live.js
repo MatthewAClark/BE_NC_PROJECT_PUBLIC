@@ -1,4 +1,4 @@
-const {fetchStationTimetable, fetchServiceRoute, fetchStationDepartures, fetchTrainService} = require('../controllers/departures')
+const {fetchStationTimetable, fetchLiveRoute, fetchStationData, fetchStationDepartures, fetchTrainService} = require('../controllers/departures')
 
    
 
@@ -8,12 +8,14 @@ const express  = require('express');
 const router = express.Router();
 
 
-router.get('/station/:id', fetchStationDepartures);
+//router.get('/station/:id', fetchStationDepartures);
 
-router.get('/route/:id', fetchServiceRoute); 
+router.get('/route/', fetchLiveRoute); 
   router.get('/service/:id', fetchTrainService);
 
-  router.get('/timetable/station/:id', fetchStationTimetable);
+  router.get('/stationtimes/:station_name', fetchStationDepartures);
+
+  router.get('/station/:station_name', fetchStationData);
 // router.get('/stationtimes', fetchStationTimetable);
 
 //  router.get('/fetchservices', fetchServices);

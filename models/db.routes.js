@@ -1,8 +1,8 @@
 const db = require('../config/index.js');
 
-const getAllSchedules = () => db.manyOrNone(`SELECT * FROM train_schedule`)
+const getAllRoutes = () => db.manyOrNone(`SELECT * FROM train_routes`)
 
-const getScheduleById = (train_id) => db.oneOrNone('SELECT * FROM train_schedule WHERE train_id = $1', [train_id])
+const getRouteByStartStation = (train_id) => db.oneOrNone('SELECT * FROM train_schedule WHERE train_id = $1', [train_id])
 
 const getScheduleByDepTime = (departure_time) => db.manyOrNone(`SELECT * FROM train_schedule WHERE departure_time = $1`, [departure_time])
 
@@ -29,4 +29,4 @@ const getScheduleFromToDepTime = (departure_time_from, departure_time_to) => db.
 
 // const putDelayArrivalTimeUpdate = (expected_arrival_time, delay_id) => db.oneOrNone(`UPDATE delays SET expected_arrival_time = $1 WHERE delay_id = $2 RETURNING *`, [expected_arrival_time, delay_id]);
 
-module.exports = { getScheduleFromToDepTime, postNewSchedule, getAllSchedules, getScheduleById, getScheduleByDepTime}
+module.exports = { getAllRoutes, getRouteByStartStation }

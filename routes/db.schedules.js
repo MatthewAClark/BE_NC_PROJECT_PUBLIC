@@ -1,11 +1,13 @@
 const express  = require('express');
 const router = express.Router();
-const {addNewSchedule, fetchAllSchedules, fetchScheduleById} = require('../controllers/db.schedules')
+const {fetchSchedules, addNewSchedule, fetchAllSchedules, fetchScheduleById} = require('../controllers/db.schedules')
 
-router.get('/', fetchAllSchedules)
+router.get('/', fetchSchedules)
 
-router.get('/:schedule_id', fetchScheduleById)
+router.get('/id/:schedule_id', fetchScheduleById)
 
 router.post('/', addNewSchedule)
+
+router.get('/all', fetchAllSchedules)
 
 module.exports = router

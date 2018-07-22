@@ -2,6 +2,8 @@ const {addCancelled, fetchScheduleByTime, fetchSchedules, addSchedule, addDelay,
 const dbStations = require('./db.stations.js')
 const dbSchedules = require('./db.schedules.js')
 const dbDelays = require('./db.delays.js')
+const dbDepartures = require('./db.departures.js')
+const dbRoutes = require('./db.routes.js')
    
 
 //const {main} = require('../controllers/index.js')
@@ -16,6 +18,10 @@ router.use('/schedules', dbSchedules);
 router.use('/stations', dbStations)
 
 router.use('/delays', dbDelays)
+
+router.use('/departures', dbDepartures)
+
+router.use('/routes', dbRoutes)
 
   // router.post('/schedules', addSchedule);
 

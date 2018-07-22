@@ -10,18 +10,24 @@ CREATE TABLE train_stations (
     user_station_type VARCHAR(20)
 );
 
+CREATE TABLE train_routes (
+    route_id SERIAL PRIMARY KEY,
+    starting_station INT,
+    finish_station INT,
+    FOREIGN KEY (starting_station) REFERENCES train_stations(station_id),
+    FOREIGN KEY (finish_station) REFERENCES train_stations(station_id)
+);
+
 CREATE TABLE train_schedule (
     train_id SERIAL PRIMARY KEY,
     train_uid VARCHAR(20),
-    train_departure_origin VARCHAR(30),
-    train_arrival_destination VARCHAR(30),
-    departure_time TIME,
+    train_departure_origin VARCHAR(40),
+    train_arrival_destination VARCHAR(40),
     arrival_time TIME,
+    departure_time TIME,
     train_operator VARCHAR(30),
-    user_starting_station INT,
-    user_finish_station INT,
-    FOREIGN KEY (user_starting_station) REFERENCES train_stations(station_id),
-    FOREIGN KEY (user_finish_station) REFERENCES train_stations(station_id)
+    route_id INT,
+    FOREIGN KEY (route_id) REFERENCES train_routes(route_id)
 );
 
 
@@ -40,6 +46,10 @@ CREATE TABLE delays (
 INSERT INTO train_stations (station_name, station_code, user_station_type)
     VALUES ('Liverpool South Parkway', 'LPY', 'home'),
         ('Manchester Piccadilly', 'MAN', 'work');
+
+INSERT INTO train_routes (starting_station, finish_station)
+    VALUES (1, 2),
+    (2,1);
 -- INSERT INTO train_schedule (train_uid, departure_station, arrival_station, arrival_time, departure_time, train_operator)
 --     VALUES ('Y12345', 'Manchester Piccadilly', 'Manchester Airport', '22:06', '22:07', 'Northern Rail'), 
 --     ('Y23259', 'Manchester Piccadilly', 'Liverpool South Parkway', '22:06', '22:07', 'Northern Rail'),
