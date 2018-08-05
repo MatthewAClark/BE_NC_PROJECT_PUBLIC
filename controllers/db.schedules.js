@@ -1,5 +1,8 @@
 const {getSchedulesAndRoutesByTime, getSchedulesByTime, getSchedulesByRouteIDAndTime, getSchedulesByRouteID, getScheduleFromToDepTime, postNewSchedule, getAllSchedules, getScheduleById, getScheduleByDepTime } = require('../models/db.schedules')
 
+const cronSchedule = require('../modules/autofetch').cronSchedule
+const fetchSchedulesByHour = require('../modules/autofetch').fetchSchedulesByHour
+
 function fetchSchedulesByRouteID(req, res) {
 
         if(req.query.departure_time_from) {
@@ -57,6 +60,13 @@ function fetchScheduleById(req, res) {
 
 function addNewSchedule(req, res) {
         postNewSchedule(req.body.train_uid, req.body.train_departure_origin, req.body.train_arrival_destination, req.body.arrival_time, req.body.departure_time, req.body.train_operator, req.body.route_id)
+        .then(data => {
+
+  fetchSchedulesByHour()
+  .then(res => {
+      cronSchedule(res)
+  })
+        })
         .then(data => res.status(201).send(data))
 }
 

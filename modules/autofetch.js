@@ -8,6 +8,9 @@ const cron = require('node-cron');
 
 const fetchSchedulesByHour = () => {
 
+
+
+
     // fetch all schedules from db
     return getSchedules()
         .then(result => {
@@ -135,23 +138,16 @@ const checkForDelays = (stationData) => {
     stationData.forEach(service => {
         service.data.stops.forEach(stop => {
             if(service.departing_station === stop.station_name) {
-                if (stop.status === 'LATE') {
+             
                     promises.push(new Promise(function (res, rej) {
                         res(postDelay(stop.aimed_departure_date, stop.expected_departure_date, stop.expected_arrival_time, stop.expected_departure_time,
-                                service.train_id))
+                                stop.status, service.train_id))
                     }))
 
                    
-                }
                 
-                if (stop.status === 'CANCELLED') {
-                    promises.push(new Promise(function (res, rej) {
-                        res(postCancelled(stop.aimed_departure_date, 
-                                service.train_id))
-                    }))
-
-                   
-                }
+                
+         
                 
             }
         })

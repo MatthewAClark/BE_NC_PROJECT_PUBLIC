@@ -25,18 +25,19 @@ schedules2.departures.all.forEach(elem => {
   }))
 
 })
-// Promise.all(Promises)
+Promise.all(Promises)
 //   .then(() => {
 //     Promises2 = []
+// console.log(delays)
 //     delays.forEach(elem => {
-//       Promises.push(new Promise(function (res, rej) {
+//       Promises2.push(new Promise(function (res, rej) {
 //         // console.log(elem)
 //         res(postNewDelay(elem.date_of_delay, elem.expected_date_departure, elem.expected_arrival_time, elem.expected_departure_time, elem.cancelled, elem.train_id))
 //       }))
 //     })
-//     // console.log('delays')
-//     // postNewDelay('2018-09-07', '2018-09-07', '16:05','16:07', 'false', 1)
-//     Promise.all(Promises)
+//     console.log('delays')
+//     postNewDelay('2018-09-07', '2018-09-07', '16:05','16:07', 'false', 1)
+//     Promise.all(Promises2)
 //   })
 
 

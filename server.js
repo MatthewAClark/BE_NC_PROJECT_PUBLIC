@@ -43,10 +43,10 @@ app.use((err, req, res, next) => {
    console.log(err)
   })
 
-//   fetchSchedulesByHour()
-//   .then(res => {
-//       cronSchedule(res)
-//   })
+  // fetchSchedulesByHour()
+  // .then(res => {
+  //     cronSchedule(res)
+  // })
 
 
   module.exports = app 

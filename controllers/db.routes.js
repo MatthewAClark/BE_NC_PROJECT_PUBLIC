@@ -33,6 +33,7 @@ function fetchScheduleById(req, res) {
 }
 
 function addNewRoute(req, res) {
+        console.log(req.body.starting_station, req.body.finish_station)
         postNewRoute(req.body.starting_station, req.body.finish_station)
         .then(data => res.status(201).send(data))
 }

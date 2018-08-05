@@ -1,8 +1,10 @@
 const express  = require('express');
 const router = express.Router();
-const {addNewDelay, fetchAllDelays, fetchDelayById} = require('../controllers/db.delays')
+const {fetchDelaysWithSchedules, addNewDelay, fetchAllDelays, fetchDelayById} = require('../controllers/db.delays')
 
 router.get('/', fetchAllDelays)
+
+router.get('/schedules', fetchDelaysWithSchedules)
 
 router.get('/:schedule_id', fetchDelayById)
 
