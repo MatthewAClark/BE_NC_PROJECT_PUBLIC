@@ -1,4 +1,4 @@
-const { postNewRoute, getAllRoutes, getRouteByStartStation } = require('../models/db.routes')
+const {getStartStation, getStartStationByStartId, postNewRoute, getAllRoutes, getRouteByStartStation } = require('../models/db.routes')
 
 function fetchRouteByStartStation(req, res) {
 
@@ -8,6 +8,22 @@ function fetchRouteByStartStation(req, res) {
                 .catch(err => console.log(err))
         
        
+}
+
+function fetchStartStationByStartId(req, res) {
+        getStartStationByStartId(req.params.start_id)
+        .then(data => res.status(200).send(data))
+        .catch(err => console.log(err))
+
+
+}
+
+function fetchStartStation(req, res) {
+        getStartStation()
+        .then(data => res.status(200).send(data))
+        .catch(err => console.log(err))
+
+
 }
 
 function fetchScheduleById(req, res) {
@@ -29,4 +45,4 @@ function fetchAllRoutes(req, res) {
                         .then(data => res.status(200).send(data))
  }
 
-module.exports = { addNewRoute, fetchAllRoutes, fetchRouteByStartStation }
+module.exports = { fetchStartStation, fetchStartStationByStartId, addNewRoute, fetchAllRoutes, fetchRouteByStartStation }

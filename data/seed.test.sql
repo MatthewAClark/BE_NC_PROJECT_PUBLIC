@@ -11,6 +11,8 @@ CREATE TABLE train_stations (
     user_station_type VARCHAR(20)
 );
 
+
+
 CREATE TABLE train_schedule (
     train_id SERIAL PRIMARY KEY,
     train_uid VARCHAR(20),

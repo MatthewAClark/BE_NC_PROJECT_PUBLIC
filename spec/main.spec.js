@@ -62,7 +62,7 @@ describe('/api/db/schedules', () => {
 
     })
 
-    it('GETs schedule by time', () => {
+    it('GETs schedule by dep time', () => {
         // runs mock server
         return request(app)
             // get request to mock server

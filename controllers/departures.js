@@ -5,14 +5,16 @@ const {getStationData, getStationTimetable, getLiveRoute, getStationDepartures, 
 function fetchStationDepartures(req, res) {
     getStationDepartures(req.params.station_name)
         .then(departures => res.status(200).send(departures))
+        .catch(err => console.log(err))
 
 }
 
 function fetchStationTimetable(req, res) {
-    getStationTimetable(req.params.id,  req.query.destination)
+    // console.log('here2here', req.params/)
+    getStationTimetable(req.params.station_code,  req.query.destination)
     
         .then(data => res.status(200).send(data))
-    
+    .catch(err => console.log(err))
 }
 
 function fetchTrainService(req, res) {
@@ -22,6 +24,7 @@ function fetchTrainService(req, res) {
 
             res.status(200).send(res.data)
         })
+        .catch(err => console.log(err))
 
 }
 
@@ -33,11 +36,13 @@ function fetchStationData(req, res) {
     .then(station => {
         res.status(200).send(station.data)
     })
+    .catch(err => console.log(err))
 }
 
 function fetchLiveRoute(req, res) {
     getLiveRoute(req.query.from, req.query.to)
         .then(live => res.status(200).send(live))
+        .catch(err => console.log(err))
 }
 
 

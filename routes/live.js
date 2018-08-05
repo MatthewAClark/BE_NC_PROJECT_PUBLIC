@@ -13,6 +13,8 @@ const router = express.Router();
 router.get('/route/', fetchLiveRoute); 
   router.get('/service/:id', fetchTrainService);
 
+  router.get('/station/route/:station_code', fetchStationTimetable)
+
   router.get('/stationtimes/:station_name', fetchStationDepartures);
 
   router.get('/station/:station_name', fetchStationData);
