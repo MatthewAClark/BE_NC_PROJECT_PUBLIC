@@ -12,7 +12,10 @@ const getSchedulesByRouteIDAndTime = (route_id, departure_time_from, departure_t
 
 const getSchedulesByTime = (departure_time_from, departure_time_to) => db.manyOrNone(`SELECT * FROM train_schedule WHERE departure_time BETWEEN $1 AND $2`, [departure_time_from, departure_time_to])
 
+
 const getSchedulesAndRoutesByTime = (from, to) => db.manyOrNone(`SELECT * FROM train_routes INNER JOIN train_schedule ON train_schedule.route_id=train_routes.route_id WHERE train_schedule.departure_time BETWEEN $1 AND $2`, [from, to])
+
+const getSchedulesWithStationByTime = (dep_time) => db.manyOrNone (`SELECT * FROM train_schedule INNER JOIN train_routes ON train_schedule.route_id=train_routes.route_id INNER JOIN train_routes ON train_stations.station_id=train_routes.starting_station WHERE train_schedule.departure_time=$1`, [dep_time])
 
 const getSchedulesByRouteID = (route_id) => db.manyOrNone(`SELECT * FROM train_schedule WHERE route_id=$1`, [route_id])
 
@@ -36,4 +39,4 @@ const getScheduleFromToDepTime = (departure_time_from, departure_time_to) => db.
 
 // const putDelayArrivalTimeUpdate = (expected_arrival_time, delay_id) => db.oneOrNone(`UPDATE delays SET expected_arrival_time = $1 WHERE delay_id = $2 RETURNING *`, [expected_arrival_time, delay_id]);
 
-module.exports = {getSchedulesAndRoutesByTime, getSchedulesByTime, getSchedulesByRouteIDAndTime, getSchedulesByRouteID, getScheduleFromToDepTime, postNewSchedule, getAllSchedules, getScheduleById, getScheduleByDepTime}
+module.exports = {getSchedulesWithStationByTime, getSchedulesAndRoutesByTime, getSchedulesByTime, getSchedulesByRouteIDAndTime, getSchedulesByRouteID, getScheduleFromToDepTime, postNewSchedule, getAllSchedules, getScheduleById, getScheduleByDepTime}

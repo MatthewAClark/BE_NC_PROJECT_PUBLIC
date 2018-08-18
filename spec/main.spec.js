@@ -7,6 +7,11 @@ const getCurrentDateTime = require('../modules/autofetch').getCurrentDateTime;
 const checkForDelays = require('../modules/autofetch').checkForDelays;
 const fetchSchedulesByHour = require('../modules/autofetch').fetchSchedulesByHour
 const cronSchedule =  require('../modules/autofetch').cronSchedule
+const fetchLiveStationsFromSchedules =  require('../modules/autofetch').fetchLiveStationsFromSchedules
+const getScheduleByTime = require('../models/db').getScheduleByTime
+const getSchedulesWithStationByTime = require('../models/db').getSchedulesWithStationByTime
+const postDelay = require('../models/db').postDelay
+const addStatusToDB = require('../modules/autofetch').addStatusToDB
 
 // db API endpoint test
 describe('/api/db/stations', () => {
@@ -166,42 +171,193 @@ describe('/api/db/schedules', () => {
     })
 })
 
-// // live api
-// describe('/api/live/schedules', () => {
-//     it('GETs all live schedules from a station', () => {
-//         // runs mock server
-//         return request(app)
-//             // get request to mock server
-//             .get('/api/live/station/exd')
-//             // supertest expect  - key on promise object
-//             .expect(200)
-//             .then((res) => {
+// Procedure for automaticallly checking delays
 
-//                 // chai expect
-//                 //  expect(res.body).to.be.an('array');
-//                 expect(res.body.station_name).to.equal('Exeter St Davids');
+// Cron schedule calls getSchedulesWithStationByTime. This returns an array with all schedules with given dep time 
 
-//             })
+// Fetch all departures with given time
+describe('Fetch all schedules from db with given time', () => {
+    it('GETs all live schedules from a station', () => {
+        getSchedulesWithStationByTime('12:24')
+        // runs mock server
+      //  return request(app)
+            // get request to mock server
+           // .get('/api/live/station/live/EXD')
+            // supertest expect  - key on promise object
+        //    .expect(200)
+            .then((res) => {
+                console.log(res)
 
-//     })
-// })
+                // chai expect
+                  expect(res).to.be.an('array');
+                  expect(res[0].station_name).to.equal('Exeter St Davids')
+                 expect(res[0].train_arrival_destination).to.equal('Newcastle');
+                 expect(res[0].departure_time).to.equal('12:24:00');
 
-// describe('/api/route/MAN/?destination=LPY', () => {
-//     it('GETs all live schedules from a station', () => {
-//         // runs mock server
-//         return request(app)
-//             // get request to mock server
-//             .get('/api/live/route/MAN/?destination=LPY')
-//             // supertest expect  - key on promise object
-//             .expect(200)
-//             .then((res) => {
-//                 //console.log(res.body)
-//                 expect(res.body.station_name).to.equal('Manchester Piccadilly');
-//                 expect(res.body.departures.all[0].destination_name).to.equal('Liverpool South Parkway')
-//             })
+            })
 
-//     })
-// })
+    })
+})
+
+// Fetch live status from these schedules
+describe.only('fetchLivStationsFromSchedules', () => {
+    it('Returns live status from given schedules', () => {
+        fetchLiveStationsFromSchedules([ { 'train_id': 7,
+            'train_uid': 'C76193',
+            'train_departure_origin': 'Plymouth',
+            'train_arrival_destination': 'Newcastle',
+            'arrival_time': '12:22:00',
+            'departure_time': '12:24:00',
+            'train_operator': 'Crosscountry',
+            'route_id': 4,
+            'starting_station': 4,
+            'finish_station': 3,
+            'station_id': 4,
+            'station_name': 'Exeter St Davids',
+            'station_code': 'EXD',
+            'user_station_type': null } ])
+        // runs mock server
+      //  return request(app)
+            // get request to mock server
+           // .get('/api/live/station/live/EXD')
+            // supertest expect  - key on promise object
+        //    .expect(200)
+            .then((res) => {
+                expect(res).to.be.an('array')
+                expect(res[0].data.departures.all[0].train_uid).to.equal('C76193')
+                console.log(res[0].data.departures)
+
+                // chai expect
+                //   expect(res).to.be.an('array');
+                //   expect(res[0].station_name).to.equal('Exeter St Davids')
+                //  expect(res[0].train_arrival_destination).to.equal('Newcastle');
+                //  expect(res[0].departure_time).to.equal('12:24:00');
+
+            })
+
+    })
+})
+
+describe('addStatusToDB', () => {
+    it('', () => {
+        addStatusToDB([{
+            "date": "2018-08-13",
+            "time_of_day": "12:01",
+            "request_time": "2018-08-13T12:01:41+01:00",
+            "station_name": "Exeter St Davids",
+            "station_code": "exd",
+            "departures": {
+                "all": [{
+                    "mode": "train",
+                    "service": "22180011",
+                    "train_uid": "C76193",
+                    "platform": "5",
+                    "operator": "XC",
+                    "operator_name": "CrossCountry",
+                    "aimed_departure_time": "12:24",
+                    "aimed_arrival_time": "12:22",
+                    "aimed_pass_time": null,
+                    "origin_name": "Plymouth",
+                    "destination_name": "Newcastle",
+                    "source": "Network Rail",
+                    "category": "XX",
+                    "service_timetable": {
+                        "id": "https://transportapi.com/v3/uk/train/service/train_uid:C76193/2018-08-13/timetable.json?app_id=02fcc956&app_key=e1c1da0ba1fd90013ac8d9481e4106fd&darwin=true&live=true"
+                    },
+                    "status": "LATE",
+                    "expected_arrival_time": "12:23",
+                    "expected_departure_time": "12:25",
+                    "best_arrival_estimate_mins": 21,
+                    "best_departure_estimate_mins": 23
+                }]}}])
+        // runs mock server
+      //  return request(app)
+            // get request to mock server
+           // .get('/api/live/station/live/EXD')
+            // supertest expect  - key on promise object
+        //    .expect(200)
+            .then((res) => {
+                
+               // console.log(res)
+
+                // chai expect
+                   expect(res).to.be.an('array');
+                //   expect(res[0].station_name).to.equal('Exeter St Davids')
+                //  expect(res[0].train_arrival_destination).to.equal('Newcastle');
+                //  expect(res[0].departure_time).to.equal('12:24:00');
+
+            })
+
+    })
+})
+
+
+
+
+
+
+describe('post a schedule perfomance', () => {
+    it('posts a delay', () => {
+        postDelay('2018-08-13', '2018-08-13', '13:50', '13:51', 'LATE', 7)
+        // runs mock server
+      //  return request(app)
+            // get request to mock server
+           // .get('/api/live/station/live/EXD')
+            // supertest expect  - key on promise object
+        //    .expect(200)
+            .then((res) => {
+                //console.log(res)
+
+                // chai expect
+                  expect(res).to.be.an('object');
+                 expect(res.expected_date_departure).to.equal('2018-08-13');
+                 expect(res.expected_departure_time).to.equal('13:51:00');
+
+            })
+
+    })
+})
+
+// fetch a live status from Transport API for a given station
+describe('/api/live/station/live/EXD', () => {
+    it('GETs all live schedules from a station', () => {
+        // runs mock server
+        return request(app)
+            // get request to mock server
+            .get('/api/live/station/live/EXD')
+            // supertest expect  - key on promise object
+            .expect(200)
+            .then((res) => {
+                
+                console.log(res.body.data)
+                // chai expect
+                //  expect(res.body).to.be.an('array');
+                expect(res.body.data.station_name).to.equal('Exeter St Davids');
+
+            })
+
+    })
+})
+
+
+
+
+describe('/api/route/MAN/?destination=LPY', () => {
+    it('GETs all live schedules from a station', () => {
+        // runs mock server
+        return request(app)
+            // get request to mock server
+            .get('/api/live/route/MAN/?destination=LPY')
+            // supertest expect  - key on promise object
+            .expect(200)
+            .then((res) => {
+                //console.log(res.body)
+                expect(res.body.station_name).to.equal('Manchester Piccadilly');
+                expect(res.body.departures.all[0].destination_name).to.equal('Liverpool South Parkway')
+            })
+
+    })
+})
 
 // describe('/api/route/MAN/?destination=LPY', () => {
 //     it('GETs all live schedules for a service', () => {
@@ -224,7 +380,7 @@ describe('/api/db/schedules', () => {
 
 // })
 
-// describe('', () => {
+// describe.only('', () => {
 //     it('', () => {
 //         fetchSchedulesByHour()
 //         .then(res => {
@@ -238,15 +394,27 @@ describe('/api/db/schedules', () => {
 //     })
 // })
 
-// describe('', () => {
+
+// cron database test
+
+// This section tests whether the pulling of live data for train perfomance is working
+// Fetch train from simulated transport API
+// Strip hours and mins off to store it in cron
+// Cron should then call another function that fetches all train departures at a specific time
+// 
+
+
+
+// describe.only('', () => {
 //     it('', () => {
-//         checkLiveStatus('22:07', '2018-07-16')
-//         .then(res => {
-//            checkForDelays(res)
+//         // checkLiveStatus('22:07', '2018-07-16')
+//         // .then(res => {
+//         //    checkForDelays(res)
+//         getScheduleByTime('13:20')
 //             .then(res => {
 //                 console.log(res)
 //            })
-//         })
+//        // })
 //     })
 // })
 

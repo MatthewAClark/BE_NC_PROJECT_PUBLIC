@@ -1,5 +1,6 @@
 const { putScheduleArrivalStationUpdate, putDelayArrivalTimeUpdate, putScheduleArrivalTimeUpdate, getScheduleByTime, getSchedule, getSchedules, postSchedule, postDelay, postCancelled, getDelays } = require('../models/db');
 
+
 function fetchSchedules(req, res) {
     getSchedules()
         .then(data => res.status(200).send(data))

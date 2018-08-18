@@ -1,6 +1,6 @@
 const readjson = require('readjson')
 
-const getStationDepartures = (stationCode) => {
+const getStationData = (stationCode) => {
   return new Promise(function (res, rej) {
 
     res(readjson.sync(`./data/station.departures.test.json`))
@@ -10,7 +10,7 @@ const getStationDepartures = (stationCode) => {
 
 const getServiceRoute = (origin, destination) => {
   return new Promise(function (res, rej) {
-
+console.log('we are here')
     res(readjson.sync(`./data/service.route.test.json`))
 
 
@@ -31,6 +31,14 @@ const getTrainServiceLive = (train_uid, date) => {
     })
   }
 
+  const getLiveStation = (station_code) => {
+    return new Promise(function(res, rej) {
+      if (station_code === 'EXD') {
+        res({ data: readjson.sync(`./data/test/liveStation.json`)})
+      } else throw(`expeceted EXD but got ${station_code}`)
+    })
+  }
+
   
 
-  module.exports = { getServiceRoute, getStationDepartures, getTrainServiceLive }
+  module.exports = { getLiveStation, getServiceRoute, getStationData, getTrainServiceLive }

@@ -1,37 +1,39 @@
 const { getSchedules } = require('../models/db.js');
 const { getTrainServiceLive } = require(`../models/departures.${process.env.NODE_ENV}`)
-const { getServiceRoute } = require(`../models/departures.${process.env.NODE_ENV}`)
+const { getLiveStation } = require(`../models/departures.${process.env.NODE_ENV}`)
 const { getScheduleByTime } = require('../models/db.js');
 const { postDelay } = require('../models/db.js')
 const { postCancelled } = require('../models/db.js')
+const { getSchedulesWithStationByTime } = require('../models/db.js')
 const cron = require('node-cron');
 
-const fetchSchedulesByHour = () => {
+const fetchSchedulesByHour = (data) => {
 
 
 
 
     // fetch all schedules from db
-    return getSchedules()
-        .then(result => {
-            let schedulesByHourArr = []
-            // cycle through the 24 hours of the day
-            for (let i = 0; i < 24; i++) {
+    // return getSchedules()
+    // .then(result => {
+    let result = [data]
+    let schedulesByHourArr = []
+    // cycle through the 24 hours of the day
+    for (let i = 0; i < 24; i++) {
 
-                // add leading zeros if necessary to current loop index as it represents the hour
-                let iChar = ''
-                if (i < 10) iChar = `0${i}`; else iChar = `${i}`
+        // add leading zeros if necessary to current loop index as it represents the hour
+        let iChar = ''
+        if (i < 10) iChar = `0${i}`; else iChar = `${i}`
 
-                // Create a new array with each array representing one hour of train schedules
-                const schedulesByHour = result.filter(schedule =>
-                    (schedule.departure_time.slice(0, 2) === iChar))
+        // Create a new array with each array representing one hour of train schedules
+        const schedulesByHour = result.filter(schedule =>
+            (schedule.departure_time.slice(0, 2) === iChar))
 
 
-                if (schedulesByHour.length > 0) schedulesByHourArr.push(schedulesByHour)
-            }
-            //  console.log(schedulesByHourArr)
-            return (schedulesByHourArr)
-        })
+        if (schedulesByHour.length > 0) schedulesByHourArr.push(schedulesByHour)
+    }
+    //  console.log(schedulesByHourArr)
+    return (schedulesByHourArr)
+    //   })
 
 }
 
@@ -47,18 +49,18 @@ const cronSchedule = (schedulesByHourArr) => {
 
         const hours = schedulesByHourArr[i].map(hours => Number(hours.departure_time.slice(0, 2)))
 
-        const cronSchedule = minutes.filter((elem, pos) => minutes.indexOf(elem) === pos).sort( (a,b) => a-b).join(',') + ` ${hours.filter((elem, pos) => hours.indexOf(elem) === pos)} * * *`
+        const cronSchedule = minutes.filter((elem, pos) => minutes.indexOf(elem) === pos).sort((a, b) => a - b).join(',') + ` ${hours.filter((elem, pos) => hours.indexOf(elem) === pos)} * * *`
 
         console.log(cronSchedule)
         //      scheduleByHour.push(currSchedule)
         //                     // Create schedule
-         scheduling.push(cron.schedule(cronSchedule, function () {
-            
+        scheduling.push(cron.schedule(cronSchedule, function () {
+
             const dateTime = getCurrentDateTime()
             console.log(`running new fetch at: ${dateTime.time}`)
             checkLiveStatus(dateTime.time, dateTime.date)
-            .then(res => checkForDelays(res))
-            .then(res => console.log(res))
+                .then(res => checkForDelays(res))
+                .then(res => console.log(res))
         }), false)
 
         //                 }
@@ -94,40 +96,110 @@ const getCurrentDateTime = () => {
     }
 }
 
+const fetchPerformance = (dep_time) => {
+    // Fetch all times from db that depart at given time
+    getSchedulesWithStationByTime(dep_time)
+        .then(schedules => {
+            schedules.forEach(schedule => {
+                getLiveStation(schedule.station_name)
+                    .then(res => {
+
+                    })
+            })
+        })
+}
+
+const fetchLiveStationsFromSchedules = (schedules) => {
+
+    // Ensure we do only one fetch per station
+    // Fetch station code from schedules and store them in an array
+    const stations = []
+    const promises = []
+    schedules.forEach(schedule => {
+        if (stations.indexOf(schedule.station_code) === -1) {
+            stations.push(schedule.station_code)
+        }
+    })
+
+// Go through each station
+    stations.forEach( station => {
+    promises.push(new Promise(function (res, rej) {
+        getLiveStation(station)
+            .then(status => {
+               
+              
+              // remove all unwanted departures
+              status.data.departures.all = status.data.departures.all.filter(elem => {
+                  
+                   return (schedules.map(uid => uid.train_uid).indexOf(elem.train_uid) !== -1)
+               })
+
+     
+              // depsOfInterest
+                res(status)
+            })
+
+    }))
+})
+
+    return Promise.all(promises)
+
+}
+
+const addStatusToDB = (allStatus) => {
+    const promises = []
+    allStatus.forEach(station => {
+        console.log(station)
+        station.departures.all.forEach(schedule => {
+            promises.push(new Promise(function (res, rej) {
+                res(postDelay(station.date, station.date, schedule.expected_arrival_time, schedule.expected_departure_time, schedule.status)) 
+            }))
+        })
+    })
+    return Promise.all(promises)
+} 
+
+
+
+
 
 const checkLiveStatus = (departure_time, departure_date) => {
 
     // fetch schedules data from db where departures match current time
-    return getScheduleByTime(departure_time, departure_date)
+    console.log(departure_time, 'time')
+    return getScheduleByTime(departure_time)
         .then(departures => {
+            console.log('here departures', departures)
             let promises = []
             // console.log('departures', departures)
             for (let i = 0; i < departures.length; i++) {
                 // fetch from live api
                 promises.push(new Promise(function (res, rej) {
                     getTrainServiceLive(departures[i].train_uid, departure_date)
-                .then(live => {
-                    
-                    res({train_id: departures[i].train_id,
-                        departing_station: departures[i].departure_station, 
-                        data: live.data})
-                } )
+                        .then(live => {
+                            console.log(live)
+                            res({
+                                train_id: departures[i].train_id,
+                                departing_station: departures[i].station_name,
+                                data: live.data
+                            })
+                        })
                 }))
 
-   
-              
+
+
 
             }
             return Promise.all(promises)
                 .then(allStatus => {
                     const stationData = []
                     allStatus.forEach(status => {
-                        //console.log('status', status)
+                        console.log('status', status)
                         stationData.push(status)
-                        
+
                     })
 
-                   return (stationData)
+                    return (stationData)
                 })
 
         })
@@ -137,32 +209,34 @@ const checkForDelays = (stationData) => {
     let promises = []
     stationData.forEach(service => {
         service.data.stops.forEach(stop => {
-            if(service.departing_station === stop.station_name) {
-             
-                    promises.push(new Promise(function (res, rej) {
-                        res(postDelay(stop.aimed_departure_date, stop.expected_departure_date, stop.expected_arrival_time, stop.expected_departure_time,
-                                stop.status, service.train_id))
-                    }))
+            if (service.departing_station === stop.station_name) {
 
-                   
-                
-                
-         
-                
+                promises.push(new Promise(function (res, rej) {
+                    console.log(stop)
+                    console.log('this is what is supposed to be going into db', )
+                    res(postDelay(stop.aimed_departure_date, stop.expected_departure_date, stop.expected_arrival_time, stop.expected_departure_time,
+                        stop.status, service.train_id))
+                }))
+
+
+
+
+
+
             }
         })
     })
     return Promise.all(promises)
-                
+
 }
 
 const updateArrivalTimes = (stationData) => {
     getScheduleByTrainUID(stationData.train_uid)
-    .then(res => {
-        if(res.arrival_time !== stationData.data.stops[stationData.data.stops.length-1]) {
-            console.log('here now')
-        }
-    })
+        .then(res => {
+            if (res.arrival_time !== stationData.data.stops[stationData.data.stops.length - 1]) {
+                console.log('here now')
+            }
+        })
 }
 
 // const checkSchedules = () => {
@@ -209,4 +283,4 @@ const updateArrivalTimes = (stationData) => {
 
 
 
-module.exports = { updateArrivalTimes, checkLiveStatus, fetchSchedulesByHour, cronSchedule, checkForDelays }
+module.exports = { addStatusToDB, fetchLiveStationsFromSchedules, fetchPerformance, updateArrivalTimes, checkLiveStatus, fetchSchedulesByHour, cronSchedule, checkForDelays }

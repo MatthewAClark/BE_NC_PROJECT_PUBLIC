@@ -1,5 +1,5 @@
 
-const {getStationData, getStationTimetable, getLiveRoute, getStationDepartures, getTrainServiceLive } = require(`../models/departures.${process.env.NODE_ENV}`);
+const {getLiveStation, getStationData, getStationTimetable, getLiveRoute, getStationDepartures, getTrainServiceLive } = require(`../models/departures.${process.env.NODE_ENV}`);
 
 
 function fetchStationDepartures(req, res) {
@@ -34,6 +34,7 @@ function fetchStationData(req, res) {
     getStationData(req.params.station_name)
     
     .then(station => {
+        console.log('station...', station)
         res.status(200).send(station.data)
     })
     .catch(err => console.log(err))
@@ -45,5 +46,11 @@ function fetchLiveRoute(req, res) {
         .catch(err => console.log(err))
 }
 
+function fetchLiveStation(req, res) {
+    getLiveStation(req.params.station_code)
+    .then(live => res.status(200).send(live))
+        .catch(err => console.log(err))
+}
 
-module.exports = { fetchStationData, fetchStationTimetable, fetchLiveRoute, fetchStationDepartures, fetchTrainService }
+
+module.exports = { fetchLiveStation, fetchStationData, fetchStationTimetable, fetchLiveRoute, fetchStationDepartures, fetchTrainService }

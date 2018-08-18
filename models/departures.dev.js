@@ -3,7 +3,7 @@ const axios = require('axios')
 const api_id = require('../config/api.config').api_id
 const api_key = require('../config/api.config').api_key
 const api_url = require('../config/api.config').api_url
-
+const api_station = require('../config/api.config').api_station
 
 
 
@@ -47,4 +47,9 @@ const getStationData = (station_name) => {
 
 }
 
-module.exports = {getStationData, getStationTimetable, getLiveRoute, getStationDepartures, getTrainServiceLive}
+const getLiveStation = (station_code) => {
+  return  axios.get(`${api_station}${station_code}/live.json?app_id=${api_id}&app_key=${api_key}&train_status=passenger&darwin=true`)
+  .then(res => res.data)
+}
+
+module.exports = {getLiveStation, getStationData, getStationTimetable, getLiveRoute, getStationDepartures, getTrainServiceLive}
