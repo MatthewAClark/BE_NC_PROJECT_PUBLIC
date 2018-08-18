@@ -121,26 +121,34 @@ const fetchLiveStationsFromSchedules = (schedules) => {
         }
     })
 
-// Go through each station
-    stations.forEach( station => {
-    promises.push(new Promise(function (res, rej) {
-        getLiveStation(station)
-            .then(status => {
-               
-              
-              // remove all unwanted departures
-              status.data.departures.all = status.data.departures.all.filter(elem => {
-                  
-                   return (schedules.map(uid => uid.train_uid).indexOf(elem.train_uid) !== -1)
-               })
+    // Go through each station
+    stations.forEach(station => {
+        promises.push(new Promise(function (res, rej) {
+            getLiveStation(station)
+                .then(status => {
 
-     
-              // depsOfInterest
-                res(status)
-            })
 
-    }))
-})
+                    // remove all unwanted departures
+                    status.data.departures.all = status.data.departures.all.filter(elem => {
+
+                        return (schedules.map(uid => uid.train_uid).indexOf(elem.train_uid) !== -1)
+                    })
+
+                    // Add train_id to result
+                    if (status.data.departures.all.length > 0) {
+                        status.data.departures.all.map(elem => {
+                            elem.train_id = schedules[(schedules.map(uid => uid.train_uid).indexOf(elem.train_uid))].train_id
+                            return elem
+                        })
+                    }
+
+
+                    // depsOfInterest
+                    res(status)
+                })
+
+        }))
+    })
 
     return Promise.all(promises)
 
@@ -152,12 +160,12 @@ const addStatusToDB = (allStatus) => {
         console.log(station)
         station.departures.all.forEach(schedule => {
             promises.push(new Promise(function (res, rej) {
-                res(postDelay(station.date, station.date, schedule.expected_arrival_time, schedule.expected_departure_time, schedule.status)) 
+                res(postDelay(station.date, station.date, schedule.expected_arrival_time, schedule.expected_departure_time, schedule.status))
             }))
         })
     })
     return Promise.all(promises)
-} 
+}
 
 
 

@@ -225,6 +225,7 @@ describe.only('fetchLivStationsFromSchedules', () => {
             .then((res) => {
                 expect(res).to.be.an('array')
                 expect(res[0].data.departures.all[0].train_uid).to.equal('C76193')
+                expect(res[0].data.departures.all[0].train_id).to.equal(7)
                 console.log(res[0].data.departures)
 
                 // chai expect
