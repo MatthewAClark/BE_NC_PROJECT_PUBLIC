@@ -6,54 +6,46 @@ const { postDelay } = require('../models/db.js')
 const { postCancelled } = require('../models/db.js')
 const { getSchedulesWithStationByTime } = require('../models/db.js')
 const cron = require('node-cron');
+const tasks = []
 
-const fetchSchedulesByHour = (schedule) => {
+const cronSetup = (schedular) => {
 
+   
+    schedular.forEach((task, i) => {
+        if (tasks[i]) {
+            tasks[i].stop()
+            tasks[i].destroy()
+        } else {tasks.push('')}
+        tasks[i] = cron.schedule(task, function () {
+            const dateTime = getCurrentDateTime()
+            console.log(`running new fetch at: ${dateTime.time}`)
+            fetchStatus(dateTime.time)
+                //.then(res => checkForDelays(res))
+                .then(res => console.log(res))
+        }, false)
 
+        tasks[i].start()
+    })
 
+                
 
-    // fetch all schedules from db
-    // return getSchedules()
-    // .then(result => {
-    //let result = [data]
-    let schedulesByHour
-    // cycle through the 24 hours of the day
-    for (let i = 0; i < 24; i++) {
-
-        // add leading zeros if necessary to current loop index as it represents the hour
-        let iChar = ''
-        if (i < 10) iChar = `0${i}`; else iChar = `${i}`
-
-        // Create a new array with each array representing one hour of train schedules
-        const schedulesByHour = result.filter(schedule =>
-            (schedule.departure_time.slice(0, 2) === iChar))
-
-
-        if (schedulesByHour.length > 0) schedulesByHourArr.push(schedulesByHour)
-    }
-    //  console.log(schedulesByHourArr)
-    return (schedulesByHourArr)
-    //   })
-
+       //     }
+      //  })
 }
 
 //                 // If there are schedules within that hour, create a schedular
 //                 if (schedulesByHour.length > 0) {
-const cronSchedule = (schedule) => {
-    let scheduling = []
-    //for (let i = 0; i < schedulesByHourArr.length; i++) {
-    //console.log(schedulesByHour)
-    //Create schedule string
-    //   let minutes = schedulesByHourArr.minutes => Number
+const cronSchedule = (schedules) => {
+   // let scheduling = []
+    const hourArr = []
+    const minuteArr = []
+ //  let hours = schedulesByHourArr.hours => Number
 
-    let minutes = Number(schedule.departure_time.slice(3, 5))
-
-
-
-    //  let hours = schedulesByHourArr.hours => Number
+ schedules.forEach(schedule => {
+     let minutes = Number(schedule.departure_time.slice(3,5))
     let hours = Number(schedule.departure_time.slice(0, 2))
-    console.log(minutes)
-
+    //console.log(minutes)
+   
     if (minutes === 0) {
         minutes = 59
         if (hours === 0) {
@@ -64,15 +56,61 @@ const cronSchedule = (schedule) => {
     } else {
         minutes = minutes - 1
     }
+   
+if (hourArr.indexOf(hours) === -1) {
+    hourArr.push(hours)
+    minuteArr.push([minutes])
+} else {
+   // console.log(minutes)
+    if ( minuteArr[hourArr.indexOf(hours)].indexOf(minutes) === -1) {
+     //  console.log(minutes)
+        minuteArr[hourArr.indexOf(hours)].push(minutes)
+    }
+}
 
+minuteArr.forEach(minute => minute.sort((a, b) => a - b))
     console.log(`${hours}:${minutes}`)
-    cron.schedule(`${minutes} ${hours} * * *`, function () {
-        const dateTime = getCurrentDateTime()
-        console.log(`running new fetch at: ${dateTime.time}`)
-        fetchStatus(dateTime.time)
-            //.then(res => checkForDelays(res))
-            .then(res => console.log(res))
-    }), false
+    console.log(hourArr, minuteArr)
+    
+ })
+ 
+
+    // for (let i = 0; i < 24; i++) {
+
+    //     // add leading zeros if necessary to current loop index as it represents the hour
+    //     let iChar = ''
+    //     if (i < 10) iChar = `0${i}`; else iChar = `${i}`
+
+    //     // Create a new array with each array representing one hour of train schedules
+    //          const scheduling = schedules.filter(schedule =>
+    //              (schedule.departure_time.slice(0, 2) === iChar))
+
+
+    //          if (schedulesByHour.length > 0) schedulesByHourArr.push(schedulesByHour)
+
+    // //for (let i = 0; i < schedulesByHourArr.length; i++) {
+    // //console.log(schedulesByHour)
+    // //Create schedule string
+    // //   let minutes = schedulesByHourArr.minutes => Number
+
+    // let minutes = Number(schedule.departure_time.slice(3, 5))
+
+
+
+   const schedular = []
+   hourArr.forEach((elem, i) => {
+    schedular.push(`${minuteArr[i]} ${elem} * * *`)
+   })
+
+   return schedular
+    // return(`${minutes} ${hours} * * *`)
+    // cron.schedule(`${minutes} ${hours} * * *`, function () {
+    //     const dateTime = getCurrentDateTime()
+    //     console.log(`running new fetch at: ${dateTime.time}`)
+    //     fetchStatus(dateTime.time)
+    //         //.then(res => checkForDelays(res))
+    //         .then(res => console.log(res))
+    // }), false
     //})
 
 
@@ -350,4 +388,4 @@ const addStatusToDB = (allStatus) => {
 
 
 
-module.exports = { addStatusToDB, fetchLiveStationsFromSchedules, fetchStatus, fetchSchedulesByHour, cronSchedule }
+module.exports = { addStatusToDB, fetchLiveStationsFromSchedules, fetchStatus, cronSetup, cronSchedule }

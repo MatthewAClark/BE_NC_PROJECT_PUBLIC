@@ -1,7 +1,7 @@
 const {getSchedulesAndRoutesByTime, getSchedulesByTime, getSchedulesByRouteIDAndTime, getSchedulesByRouteID, getScheduleFromToDepTime, postNewSchedule, getAllSchedules, getScheduleById, getScheduleByDepTime } = require('../models/db.schedules')
 
 const cronSchedule = require('../modules/autofetch').cronSchedule
-const fetchSchedulesByHour = require('../modules/autofetch').fetchSchedulesByHour
+const cronSetup = require('../modules/autofetch').cronSetup
 
 function fetchSchedulesByRouteID(req, res) {
 
@@ -64,7 +64,11 @@ function addNewSchedule(req, res) {
 
 // Add new schedule to cron/
 //console.log(data.departure_time.getMinutes())
-      cronSchedule(data)
+                getAllSchedules()
+                .then(res => {
+                        cronSetup(cronSchedule(res))
+                })
+      
 //    })
         })
         .then(data => res.status(201).send(data))

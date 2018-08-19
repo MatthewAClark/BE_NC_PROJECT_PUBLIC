@@ -13,6 +13,7 @@ const getSchedulesWithStationByTime = require('../models/db').getSchedulesWithSt
 const postDelay = require('../models/db').postDelay
 const addStatusToDB = require('../modules/autofetch').addStatusToDB
 const fetchStatus = require('../modules/autofetch').fetchStatus
+const cronSetup = require('../modules/autofetch').cronSetup
 
 // db API endpoint test
 describe('/api/db/stations', () => {
@@ -174,6 +175,55 @@ describe('/api/db/schedules', () => {
 
 // Procedure for automaticallly checking delays
 
+describe.only('cronSetup', () => {
+    it('GETs all from a station', () => {
+
+        cronSetup(['31,32 13 * * *', '20 14 * * *'])
+        cronSetup(['31,33 13 * * *', '20 14 * * *'])
+        // expect(cronSetup([{'departure_time':'12:52'},{'departure_time':'13:24'},{'departure_time':'12:48'},{'departure_time':'13:51'}])).to.eql(['47,51 12 * * *', '23,50 13 * * *'])
+        // runs mock server
+      //  return request(app)
+            // get request to mock server
+           // .get('/api/live/station/live/EXD')
+            // supertest expect  - key on promise object
+        //    .expect(200)
+         //   .then((res) => {
+          //      console.log(res)
+
+                // chai expect
+                //   expect(res).to.be.an('array');
+                //   expect(res[0].station_name).to.equal('Exeter St Davids')
+                //  expect(res[0].train_arrival_destination).to.equal('Newcastle');
+                //  expect(res[0].departure_time).to.equal('12:24:00');
+
+           // })
+
+    })
+})
+
+describe('cronSchedule', () => {
+    it('GETs all from a station', () => {
+        expect(cronSchedule([{'departure_time':'12:52'},{'departure_time':'13:24'},{'departure_time':'12:48'},{'departure_time':'13:51'}])).to.eql(['47,51 12 * * *', '23,50 13 * * *'])
+        // runs mock server
+      //  return request(app)
+            // get request to mock server
+           // .get('/api/live/station/live/EXD')
+            // supertest expect  - key on promise object
+        //    .expect(200)
+         //   .then((res) => {
+          //      console.log(res)
+
+                // chai expect
+                //   expect(res).to.be.an('array');
+                //   expect(res[0].station_name).to.equal('Exeter St Davids')
+                //  expect(res[0].train_arrival_destination).to.equal('Newcastle');
+                //  expect(res[0].departure_time).to.equal('12:24:00');
+
+           // })
+
+    })
+})
+
 // Cron schedule calls getSchedulesWithStationByTime. This returns an array with all schedules with given dep time 
 
 // Fetch all departures with given time
@@ -295,7 +345,7 @@ describe('addStatusToDB', () => {
 })
 
 
-describe.only('time', () => {
+describe('time', () => {
     it('GEn', () => {
         fetchStatus('12:24')
         // runs mock server
