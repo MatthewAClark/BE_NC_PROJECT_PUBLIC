@@ -14,7 +14,7 @@ const getSchedulesWithStationByTime = (dep_time) => db.manyOrNone (`SELECT * FRO
 const postSchedule = (train_uid, departure_station, arrival_station, departure_time, arrival_time, train_operator) => db.one(`INSERT INTO train_schedule (train_uid, departure_station, arrival_station, departure_time, arrival_time, train_operator) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`, [train_uid, departure_station, arrival_station, departure_time, arrival_time, train_operator])
 
 
-const postDelay = (schedule_date, expected_date_departure, expected_arrival_time, expected_departure_time, train_status, train_id) => db.one(`INSERT INTO performance (schedule_date, expected_date_departure,expected_arrival_time, expected_departure_time, train_status, train_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`, [schedule_date, expected_date_departure, expected_arrival_time, expected_departure_time, train_status, train_id])
+const postStatus = (schedule_date, expected_date_departure, expected_arrival_time, expected_departure_time, train_status, train_id) => db.one(`INSERT INTO performance (schedule_date, expected_date_departure,expected_arrival_time, expected_departure_time, train_status, train_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`, [schedule_date, expected_date_departure, expected_arrival_time, expected_departure_time, train_status, train_id])
 
 const postCancelled = (date_of_delay, train_id) => db.one(`INSERT INTO delays (date_of_delay, cancelled, train_id) VALUES ($1, true, $2) RETURNING *`, [date_of_delay, train_id])
 
@@ -24,5 +24,5 @@ const putScheduleArrivalStationUpdate = (arrival_station, train_id) => db.oneOrN
 
 const putDelayArrivalTimeUpdate = (expected_arrival_time, delay_id) => db.oneOrNone(`UPDATE delays SET expected_arrival_time = $1 WHERE delay_id = $2 RETURNING *`, [expected_arrival_time, delay_id]);
 
-module.exports = {getSchedulesWithStationByTime, putDelayArrivalTimeUpdate, putScheduleArrivalStationUpdate, putScheduleArrivalTimeUpdate, postCancelled, getSchedules, postSchedule, postDelay, getDelays, getSchedule, getScheduleByTime}
+module.exports = {getSchedulesWithStationByTime, putDelayArrivalTimeUpdate, putScheduleArrivalStationUpdate, putScheduleArrivalTimeUpdate, postCancelled, getSchedules, postSchedule, postStatus, getDelays, getSchedule, getScheduleByTime}
 

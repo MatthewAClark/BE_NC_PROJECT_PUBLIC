@@ -44,7 +44,7 @@ const getTrainServiceLive = (train_uid, date) => {
 
 const getStationData = (station_name) => {
   return axios.get(`${api_url}/places.json?query=${station_name}&type=train_station&app_id=${api_id}&app_key=${api_key}`)
-
+  .then(res => res.data)
 }
 
 const getLiveStation = (station_code) => {

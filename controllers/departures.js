@@ -29,13 +29,12 @@ function fetchTrainService(req, res) {
 }
 
 function fetchStationData(req, res) {
-    console.log('herestation')
-    console.log(req.params.station_name)
+
     getStationData(req.params.station_name)
     
     .then(station => {
-        console.log('station...', station)
-        res.status(200).send(station.data)
+        
+        res.status(200).send(station)
     })
     .catch(err => console.log(err))
 }

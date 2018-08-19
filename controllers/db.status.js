@@ -1,4 +1,4 @@
-const {getDelaysWithSchedules, getDelayByTrainId, getAllDelays, postNewDelay } = require('../models/db.delays')
+const {getDelaysWithSchedules, getDelayByTrainId, getAllDelays, postNewStatus } = require('../models/db.status')
 
 function fetchAllDelays(req, res) {
 
@@ -31,13 +31,10 @@ function fetchDelayById(req, res) {
 }
 
 function addNewDelay(req, res) {
-        postNewDelay(req.body.date_of_delay, req.body.expected_date_departure, req.body.expected_arrival_time, req.body.expected_departure_time, req.body.cancelled, req.body.train_id)
+        postNewStatus(req.body.schedule_date, req.body.expected_date_departure, req.body.expected_arrival_time, req.body.expected_departure_time, req.body.train_status, req.body.train_id)
         .then(data => res.status(201).send(data))
 }
 
-function addCancelledTrain(req, res) {
-        postCancelledTrain(req.body.date_of_delay, req.body.train_id)
-        .then(data => res.status(201).send(data))
-}
+
 
 module.exports = {fetchDelaysWithSchedules, fetchAllDelays, fetchDelayById, addNewDelay }
