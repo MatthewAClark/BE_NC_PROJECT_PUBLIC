@@ -12,6 +12,7 @@ const getScheduleByTime = require('../models/db').getScheduleByTime
 const getSchedulesWithStationByTime = require('../models/db').getSchedulesWithStationByTime
 const postDelay = require('../models/db').postDelay
 const addStatusToDB = require('../modules/autofetch').addStatusToDB
+const fetchStatus = require('../modules/autofetch').fetchStatus
 
 // db API endpoint test
 describe('/api/db/stations', () => {
@@ -200,7 +201,7 @@ describe('Fetch all schedules from db with given time', () => {
 })
 
 // Fetch live status from these schedules
-describe.only('fetchLivStationsFromSchedules', () => {
+describe('fetchLivStationsFromSchedules', () => {
     it('Returns live status from given schedules', () => {
         fetchLiveStationsFromSchedules([ { 'train_id': 7,
             'train_uid': 'C76193',
@@ -226,7 +227,7 @@ describe.only('fetchLivStationsFromSchedules', () => {
                 expect(res).to.be.an('array')
                 expect(res[0].data.departures.all[0].train_uid).to.equal('C76193')
                 expect(res[0].data.departures.all[0].train_id).to.equal(7)
-                console.log(res[0].data.departures)
+              //  console.log(res[0].data.departures)
 
                 // chai expect
                 //   expect(res).to.be.an('array');
@@ -241,7 +242,7 @@ describe.only('fetchLivStationsFromSchedules', () => {
 
 describe('addStatusToDB', () => {
     it('', () => {
-        addStatusToDB([{
+        addStatusToDB([ {
             "date": "2018-08-13",
             "time_of_day": "12:01",
             "request_time": "2018-08-13T12:01:41+01:00",
@@ -269,7 +270,8 @@ describe('addStatusToDB', () => {
                     "expected_arrival_time": "12:23",
                     "expected_departure_time": "12:25",
                     "best_arrival_estimate_mins": 21,
-                    "best_departure_estimate_mins": 23
+                    "best_departure_estimate_mins": 23,
+                    "train_id": 7
                 }]}}])
         // runs mock server
       //  return request(app)
@@ -279,7 +281,7 @@ describe('addStatusToDB', () => {
         //    .expect(200)
             .then((res) => {
                 
-               // console.log(res)
+                console.log(res)
 
                 // chai expect
                    expect(res).to.be.an('array');
@@ -293,7 +295,28 @@ describe('addStatusToDB', () => {
 })
 
 
+describe.only('time', () => {
+    it('GEn', () => {
+        fetchStatus('12:24')
+        // runs mock server
+      //  return request(app)
+            // get request to mock server
+           // .get('/api/live/station/live/EXD')
+            // supertest expect  - key on promise object
+        //    .expect(200)
+            .then((res) => {
+                console.log(res)
 
+                // chai expect
+                //   expect(res).to.be.an('array');
+                //   expect(res[0].station_name).to.equal('Exeter St Davids')
+                //  expect(res[0].train_arrival_destination).to.equal('Newcastle');
+                //  expect(res[0].departure_time).to.equal('12:24:00');
+
+            })
+
+    })
+})
 
 
 
