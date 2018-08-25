@@ -19,8 +19,8 @@ const getStationDepartures = (stationCode) => {
        
 }
 
-const getStationTimetable = (stationCode, destination) => {
-  return  axios.get(`${api_url}/train/station/${stationCode}/timetable.json?app_id=${api_id}&app_key=${api_key}&train_status=passenger&to_offset=PT23:59:00&calling_at=${destination}`)
+const getStationTimetable = (station_from, station_to, date, time, offset) => {
+  return  axios.get(`${api_url}/train/station/${station_from}/${date}/${time}/timetable.json?app_id=${api_id}&app_key=${api_key}&train_status=passenger&to_offset=PT${offset}:00&calling_at=${station_to}`)
   .then(res => res.data)
 //    .then(userData => res.status(200).send(userData))
 // return 'Hello'

@@ -11,7 +11,7 @@ function fetchStationDepartures(req, res) {
 
 function fetchStationTimetable(req, res) {
     // console.log('here2here', req.params/)
-    getStationTimetable(req.params.station_code,  req.query.destination)
+    getStationTimetable(req.query.station_from,  req.query.station_to, req.query.date, req.query.time, req.query.offset)
     
         .then(data => res.status(200).send(data))
     .catch(err => console.log(err))
