@@ -4,6 +4,8 @@ const getAllStations = () => db.manyOrNone(`SELECT * FROM train_stations`)
 
 const getStationById = (station_id) => db.oneOrNone('SELECT * FROM train_stations WHERE station_id = $1', [station_id])
 
+const getStationByCode = (station_code) => db.oneOrNone('SELECT * FROM train_stations WHERE station_code = $1', [station_code])
+
 const postStation = (station_name, station_code, user_station_type) => db.one(`INSERT INTO train_stations (station_name, station_code, user_station_type) VALUES ($1, $2, $3) RETURNING *`, [station_name, station_code, user_station_type])
 
 const deleteStation = (station_id) => db.one(`DELETE FROM train_stations WHERE station_id = $1 RETURNING *`, [station_id])
@@ -27,4 +29,4 @@ const deleteStation = (station_id) => db.one(`DELETE FROM train_stations WHERE s
 
 // const putDelayArrivalTimeUpdate = (expected_arrival_time, delay_id) => db.oneOrNone(`UPDATE delays SET expected_arrival_time = $1 WHERE delay_id = $2 RETURNING *`, [expected_arrival_time, delay_id]);
 
-module.exports = { deleteStation, postStation, getAllStations, getStationById}
+module.exports = { getStationByCode, deleteStation, postStation, getAllStations, getStationById}

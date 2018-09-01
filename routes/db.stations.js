@@ -1,8 +1,8 @@
 const express  = require('express');
 const router = express.Router();
-const { removeStation, addNewStation, fetchAllStations, fetchStationById} = require('../controllers/db.stations')
+const { removeStation, addNewStation, fetchStation, fetchAllStations, fetchStationById} = require('../controllers/db.stations')
 
-router.get('/', fetchAllStations)
+router.get('/', fetchStation)
 
 router.get('/:station_id', fetchStationById)
 
