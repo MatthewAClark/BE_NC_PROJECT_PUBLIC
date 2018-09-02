@@ -8,7 +8,48 @@ const getStationByCode = (station_code) => db.oneOrNone('SELECT * FROM train_sta
 
 const postStation = (station_name, station_code, user_station_type) => db.one(`INSERT INTO train_stations (station_name, station_code, user_station_type) VALUES ($1, $2, $3) RETURNING *`, [station_name, station_code, user_station_type])
 
-const deleteStation = (station_id) => db.one(`DELETE FROM train_stations WHERE station_id = $1 RETURNING *`, [station_id])
+const deleteStation = (station_id) => {
+    return db.manyOrNone(`SELECT * FROM train_routes INNER JOIN train_schedule ON train_routes.route_id=train_schedule.route_id WHERE train_routes.starting_station=$1`, [station_id]).then(result => {
+        const promises = []
+        result.forEach(elem => {
+            promises.push(
+                new Promise(function (res, rej) {
+
+                    res(db.query(`DELETE FROM performance WHERE train_id = $1`, [elem.train_id]).then(() => {
+                        db.query(`DELETE FROM train_schedule WHERE train_id = $1`, [elem.train_id])
+                    }))
+                }
+                ))
+
+        })
+
+        return Promise.all(promises)
+    })
+        .then(() => db.query(`DELETE FROM train_routes WHERE starting_station = $1`, [station_id]))
+        .then(() => {
+
+            db.manyOrNone(`SELECT * FROM train_routes INNER JOIN train_schedule ON train_routes.route_id=train_schedule.route_id WHERE train_routes.finish_station=$1`, [station_id]).then(result => {
+                const promises = []
+                result.forEach(elem => {
+                    promises.push(
+                        new Promise(function (res, rej) {
+
+                            res(db.query(`DELETE FROM performance WHERE train_id = $1`, [elem.train_id]).then(() => {
+                                db.query(`DELETE FROM train_schedule WHERE train_id = $1`, [elem.train_id])
+                            }))
+                        }
+                        ))
+
+                })
+
+                return Promise.all(promises)
+            }).then(() => db.query(`DELETE FROM train_routes WHERE finish_station = $1`, [station_id]))
+        })
+        //})
+        .then(() => db.query(`DELETE FROM train_stations WHERE station_id = $1 RETURNING *`, [station_id]))
+}
+
+
 
 // const getSchedule = (a,b) => db.manyOrNone(`SELECT * FROM train_schedule WHERE train_id = $2`, [a, b])
 

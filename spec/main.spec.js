@@ -2,6 +2,8 @@ process.env.NODE_ENV = 'test';
 const { expect } = require('chai');
 const request = require('supertest');
 const app = require('../server');
+const db = require('../config/index.js');
+
 
 const getCurrentDateTime = require('../modules/autofetch').getCurrentDateTime;
 
@@ -18,7 +20,7 @@ const getAllSchedules = require('../models/db.schedules').getAllSchedules
 const getLiveStation = require('../models/departures.test').getLiveStation
 
 // db API endpoint test
-describe.only('db api endpoints', () => {
+describe('db api endpoints', () => {
     describe('/api/db/stations', () => {
         it('Fetches all stations from our db', () => {
             return request(app) // run mock server
@@ -152,13 +154,124 @@ describe.only('db api endpoints', () => {
 
                     })
             })
+            describe.only('/api/db/schedules/1 - delete', () => {
+                // it('fext schedule', () => {
 
+                //     return request(app)
+                //     // get request to mock server
+                //     .get('/api/db/schedules/id/1')
+                //     // supertest expect  - key on promise object
+                //     .expect(200)
+                //     .then((res) => {
+                //         // chai expect
+                //         console.log('schedule', res.body)
+
+                //         // expect(res.body).to.be.an('object');
+                //         // // expect(res.body.length).to.equal(6);
+                //         // expect(res.body.train_uid).to.equal('Y23261')
+                // })
+
+
+
+
+
+
+                //   })
+                // it('Deletes a schedule', () => {
+                //     // runs mock server
+                //     return request(app)
+                //         // get request to mock server
+                //         .delete('/api/db/schedules/1')
+                //         // supertest expect  - key on promise object
+                //         .expect(201)
+                //         .then((res) => {
+                //             // chai expect
+                //             console.log(res.body)
+                //             // expect(res.body).to.be.an('array');
+                //             // expect(res.body.length).to.equal(6);
+                //             // expect(res.body[0].train_id).to.equal(2)
+                //         })
+                // })
+                
+
+
+
+                db.manyOrNone(`SELECT * FROM train_routes INNER JOIN train_schedule ON train_routes.route_id=train_schedule.route_id WHERE train_routes.starting_station=$1`, [station_id]).then(result => {
+                    const promises = []
+                    result.forEach(elem => {
+                       promises.push(
+                        new Promise(function (res, rej) { 
+                            
+                            res(db.query(`DELETE FROM performance WHERE train_id = $1`,[elem.train_id]).then(() => {
+                                db.query(`DELETE FROM train_schedule WHERE train_id = $1 RETURNING *`, [elem.train_id])
+                            }))
+                        }
+                       ) )
+                       
+                    })
+                    
+                    return Promise.all(promises)
+                })
+                .then(() => db.query(`DELETE FROM train_routes WHERE starting_station = $1 RETURNING *`, [station_id]))
+                .then(() => {
+
+                    db.manyOrNone(`SELECT * FROM train_routes INNER JOIN train_schedule ON train_routes.route_id=train_schedule.route_id WHERE train_routes.finish_station=$1`, [station_id]).then(result => {
+                        const promises = []
+                        result.forEach(elem => {
+                           promises.push(
+                            new Promise(function (res, rej) { 
+                                
+                                res(db.query(`DELETE FROM performance WHERE train_id = $1`,[elem.train_id]).then(() => {
+                                    db.query(`DELETE FROM train_schedule WHERE train_id = $1 RETURNING *`, [elem.train_id])
+                                }))
+                            }
+                           ) )
+                           
+                        })
+                        
+                        return Promise.all(promises)
+                    }) .then(() => db.query(`DELETE FROM train_routes WHERE finish_station = $1 RETURNING *`, [station_id]))
+                })
+} )
+.then(() => db.query(`DELETE FROM train_stations WHERE station_id = $1 RETURNING *`, [station_id]))
+               
+
+                .then(() => {
+                    db.manyOrNone(`SELECT * FROM train_routes INNER JOIN train_schedule ON train_routes.route_id=train_schedule.route_id`).then(result => console.log('routes', result))
+                    db.manyOrNone(`SELECT * FROM train_schedule`).then(result => console.log('train_schedule', result))
+                    db.manyOrNone(`SELECT * FROM performance`).then(result => console.log('performance',result))
+                })
+
+               
+                // console.log(result)
+
+
+
+
+                // it('fext schedule', () => {
+
+                //     return request(app)
+                //     // get request to mock server
+                //     .get('/api/db/schedules/id/1')
+                //     // supertest expect  - key on promise object
+                //     .expect(200)
+                //     .then((res) => {
+                //         // chai expect
+                //         console.log('schedule', res.body)
+
+                //         // expect(res.body).to.be.an('object');
+                //         // // expect(res.body.length).to.equal(6);
+                //         // expect(res.body.train_uid).to.equal('Y23261')
+                // })
+                //  })
+
+            })
 
         })
     })
 })
 
-describe.only('Live API Test', () => {
+describe('Live API Test', () => {
     describe('/api/route/?from=MAN&to=LPY', () => {
         it('GETs all live schedules from a station to another station', () => {
             // runs mock server
@@ -168,9 +281,9 @@ describe.only('Live API Test', () => {
                 // supertest expect  - key on promise object
                 .expect(200)
                 .then((res) => {
-                 
+
                     expect(res.body.station_name).to.equal('Manchester Piccadilly');
-                     expect(res.body.departures.all[0].destination_name).to.equal('Liverpool Lime Street (High Level)')
+                    expect(res.body.departures.all[0].destination_name).to.equal('Liverpool Lime Street (High Level)')
                 })
 
         })
@@ -185,9 +298,9 @@ describe.only('Live API Test', () => {
                 // supertest expect  - key on promise object
                 .expect(200)
                 .then((res) => {
-                 console.log(res.body)
+                    console.log(res.body)
                     expect(res.body.member[0].name).to.equal('Leeds');
-                     expect(res.body.member[0].station_code).to.equal('LDS')
+                    expect(res.body.member[0].station_code).to.equal('LDS')
                 })
 
         })
@@ -196,7 +309,7 @@ describe.only('Live API Test', () => {
 
 /*  */
 
-describe.only('Procedures for fetching and posting train data for backend status checks', () => {
+describe('Procedures for fetching and posting train data for backend status checks', () => {
     describe('getAllSchedules', () => {
         it('Fetches all schedules from db', () => {
             getAllSchedules().then(result => {
@@ -242,7 +355,7 @@ describe.only('Procedures for fetching and posting train data for backend status
     })
 })
 
-describe.only('Procedures for creating cron scheduling', () => {
+describe('Procedures for creating cron scheduling', () => {
     describe('cronSchedule', () => {
         it('Returns the correct syntax to work with node-cron schedular', () => {
             expect(cronSchedule([{ 'departure_time': '12:52' }, { 'departure_time': '13:24' }, { 'departure_time': '12:48' }, { 'departure_time': '13:51' }])).to.eql(['47,51 12 * * *', '23,50 13 * * *'])
@@ -258,7 +371,7 @@ describe.only('Procedures for creating cron scheduling', () => {
 
 })
 
-describe.only('Procedures for processing train status', () => {
+describe('Procedures for processing train status', () => {
 
     describe('getCurrentDateTime', () => {
         it('console.log date and time', () => {

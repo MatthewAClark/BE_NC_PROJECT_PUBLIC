@@ -1,4 +1,6 @@
-const {getSchedulesAndRoutesByTime, getSchedulesByTime, getSchedulesByRouteIDAndTime, getSchedulesByRouteID, getScheduleFromToDepTime, postNewSchedule, getAllSchedules, getScheduleById, getScheduleByDepTime } = require('../models/db.schedules')
+const {deleteSchedule, getSchedulesAndRoutesByTime, getSchedulesByTime, getSchedulesByRouteIDAndTime, getSchedulesByRouteID, getScheduleFromToDepTime, postNewSchedule, getAllSchedules, getScheduleById, getScheduleByDepTime } = require('../models/db.schedules')
+
+const {deleteStatusWithTrainID} = require('../models/db.status')
 
 const cronSchedule = require('../modules/autofetch').cronSchedule
 const cronSetup = require('../modules/autofetch').cronSetup
@@ -46,7 +48,7 @@ function fetchSchedules(req, res) {
                 .then(data => res.status(200).send(data))
         }
         if(req.query.departure_time_from) {
-                console.log('here from to')
+                
                 getScheduleFromToDepTime(req.query.departure_time_from, req.query.departure_time_to)
                 .then(data => res.status(200).send(data))
         }
@@ -77,9 +79,17 @@ function addNewSchedule(req, res) {
 
 function fetchAllSchedules(req, res) {
 
-                console.log('are we here too?')
+               
                 getAllSchedules()
                         .then(data => res.status(200).send(data))
  }
 
-module.exports = {fetchSchedulesAndRoutesByTime, fetchSchedulesByTime, fetchSchedulesByRouteID, fetchSchedules, fetchAllSchedules, fetchScheduleById, addNewSchedule }
+ function removeSchedule(req, res) {
+   
+                deleteSchedule(req.params.schedule_id)
+                .then(data => res.status(201).send(data))
+         
+       
+ }
+
+module.exports = {removeSchedule, fetchSchedulesAndRoutesByTime, fetchSchedulesByTime, fetchSchedulesByRouteID, fetchSchedules, fetchAllSchedules, fetchScheduleById, addNewSchedule }

@@ -1,6 +1,6 @@
 const express  = require('express');
 const router = express.Router();
-const {fetchStartStation, fetchStartStationByStartId, addNewRoute, fetchAllRoutes, fetchRouteByStartStation} = require('../controllers/db.routes')
+const {removeRouteFromId, fetchStartStation, fetchStartStationByStartId, addNewRoute, fetchAllRoutes, fetchRouteByStartStation} = require('../controllers/db.routes')
 
 router.get('/', fetchAllRoutes)
 
@@ -11,6 +11,8 @@ router.post('/', addNewRoute)
 router.get('/start/:start_id', fetchStartStationByStartId)
 
 router.get('/start', fetchStartStation)
+
+router.delete('/:route_id', removeRouteFromId)
 
 // router.post('/', addNewStation)
 

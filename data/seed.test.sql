@@ -66,7 +66,8 @@ INSERT INTO train_schedule (train_uid, train_departure_origin, train_arrival_des
             ('C66956','Liverpool South Parkway', 'Norwich', null, '12:03', 'East Midlands Trains', 1),
             ('Y23326', 'Liverpool South Parkway', 'Manchester Airport', null, '12:20', 'East Midlands Trains', 1),
             ('Y23330','Liverpool South Parkway', 'Manchester Airport', null, '13:20', 'Northern Rail', 1),
-             ('C76193', 'Plymouth', 'Newcastle', '12:22', '12:24', 'Crosscountry', 4);
+             ('C76193', 'Plymouth', 'Newcastle', '12:22', '12:24', 'Crosscountry', 4),
+              ('C76193', 'Plymouth', 'Leeds', '12:58', '12:59', 'Crosscountry', 4);
             
 
 INSERT INTO performance (schedule_date, expected_date_departure, expected_arrival_time, expected_departure_time, train_status, train_id)
@@ -75,7 +76,8 @@ INSERT INTO performance (schedule_date, expected_date_departure, expected_arriva
             ('2018-07-16', '2018-07-16', null, null, 'CANCELLED', 6),
             ('2018-07-16', null, null, null, 'ON TIME', 1),
             ('2018-07-16', null, null, null, 'ON TIME', 4),
-            ('2018-07-16', null, null, null, 'ON TIME', 5);
+            ('2018-07-16', null, null, null, 'ON TIME', 5),
+             ('2018-07-17', '2018-07-17', '14:41', '14:45', 'LATE', 3);
 
 -- INSERT INTO train_stations (station_name, station_code, user_station_type)
 --     VALUES ('Liverpool South Parkway', 'LPY', 'home'),

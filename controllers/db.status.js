@@ -1,4 +1,4 @@
-const {getDelaysWithSchedules, getDelayByTrainId, getAllDelays, postNewStatus } = require('../models/db.status')
+const {deleteStatusWithTrainID, getDelaysWithSchedules, getDelayByTrainId, getAllDelays, postNewStatus } = require('../models/db.status')
 
 function fetchAllDelays(req, res) {
 
@@ -35,6 +35,12 @@ function addNewDelay(req, res) {
         .then(data => res.status(201).send(data))
 }
 
+function removeStatus(req, res) {
+
+        deleteStatusWithTrainID(req.query.train_id)
+        .then(data => res.status(201).send(data))
+}
 
 
-module.exports = {fetchDelaysWithSchedules, fetchAllDelays, fetchDelayById, addNewDelay }
+
+module.exports = { removeStatus, fetchDelaysWithSchedules, fetchAllDelays, fetchDelayById, addNewDelay }

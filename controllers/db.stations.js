@@ -27,10 +27,14 @@ function addNewStation(req, res) {
         getStationByCode(req.body.station_code)
         .then(dbStation => {
                 if(!dbStation) {
+
+                        // Add station if not
                         postStation(req.body.station_name, req.body.station_code, req.body.user_station_type)
                         .then(data => res.status(201).send(data))
                 } else {
-                        res.status(208)
+
+                        //else send back status
+                        res.status(200)
                 }
         })
    
