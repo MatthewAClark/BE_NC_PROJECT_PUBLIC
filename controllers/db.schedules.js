@@ -85,7 +85,7 @@ function fetchAllSchedules(req, res) {
  }
 
  function removeSchedule(req, res) {
-   
+   console.log('here are delete', req.params.schedule_id)
                 deleteSchedule(req.params.schedule_id)
                 .then(data => res.status(201).send(data))
          
