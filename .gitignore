@@ -4,3 +4,5 @@ DS_Store
 *.config.js
 /config
 /data
+*.env
+.eslintrc.js

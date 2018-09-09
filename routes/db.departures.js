@@ -1,6 +1,6 @@
 const express  = require('express');
 const router = express.Router();
-const {fetchAllDepartures,} = require('../controllers/db.departures')
+const {fetchAllDepartures,} = require('../controllers/db.departures');
 
 // router.get('/', fetchSchedules)
 
@@ -8,6 +8,6 @@ const {fetchAllDepartures,} = require('../controllers/db.departures')
 
 // router.post('/', addNewSchedule)
 
-router.get('/all/:station_id', fetchAllDepartures)
+router.get('/all/:station_id', fetchAllDepartures);
 
-module.exports = router
+module.exports = router;

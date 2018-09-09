@@ -6,8 +6,10 @@
   "scripts": {
     "test": "psql -f ./data/seed.test.sql && mocha ./spec",
     "dev": "psql -f ./data/seed.dev.sql && nodemon listen.js",
-   
-   "olddev": "psql -f ./data/seed.dev.sql && node ./data/seed.dev.js && nodemon listen.js"
+    "start": "NODE_ENV=production node ./listen.js",
+    "seed:dev": "NODE_ENV=dev psql -f ./data/seed.dev.sql",
+    "seed:production": "NODE_ENV=production psql -f ./data/seed.production.sql",
+    "lint": "eslint ./"
   },
   "author": "Matthew Clark",
   "license": "ISC",
@@ -16,6 +18,7 @@
     "body-parser": "^1.18.3",
     "chai": "^4.1.2",
     "cors": "^2.8.4",
+    "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "mocha": "^5.2.0",
     "node-cron": "^1.2.1",
@@ -25,5 +28,8 @@
     "promisify-node": "^0.5.0",
     "readjson": "^1.1.4",
     "supertest": "^3.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.5.0"
   }
 }

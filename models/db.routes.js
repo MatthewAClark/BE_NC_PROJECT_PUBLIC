@@ -1,50 +1,43 @@
 const db = require('../config/index.js');
 
-const getAllRoutes = () => db.manyOrNone(`SELECT * FROM train_routes`)
+const getAllRoutes = () => db.manyOrNone('SELECT * FROM train_routes');
 
-const getRouteByStartStation = (station_id) => db.manyOrNone(`SELECT * FROM train_routes INNER JOIN train_stations ON train_stations.station_id=train_routes.finish_station WHERE train_routes.starting_station=$1`, [station_id])
+const getRouteByStartStation = (station_id) => db.manyOrNone('SELECT * FROM train_routes INNER JOIN train_stations ON train_stations.station_id=train_routes.finish_station WHERE train_routes.starting_station=$1', [station_id]);
 
-const getStartStationByStartId = (start_id) => db.manyOrNone(`SELECT * FROM train_routes INNER JOIN train_stations ON train_stations.station_id=train_routes.finish_station WHERE train_routes.starting_station=$1`, [start_id])
+const getStartStationByStartId = (start_id) => db.manyOrNone('SELECT * FROM train_routes INNER JOIN train_stations ON train_stations.station_id=train_routes.finish_station WHERE train_routes.starting_station=$1', [start_id]);
 
-const getStartStation = () => db.manyOrNone(`SELECT * FROM train_routes INNER JOIN train_stations ON train_stations.station_id=train_routes.finish_station`)
+const getStartStation = () => db.manyOrNone('SELECT * FROM train_routes INNER JOIN train_stations ON train_stations.station_id=train_routes.finish_station');
 
-const getRouteByStartFinishId = (start_id, finish_id) => db.oneOrNone(`SELECT * FROM train_routes WHERE starting_station=$1 AND finish_station=$2`, [start_id, finish_id])
+const getRouteByStartFinishId = (start_id, finish_id) => db.oneOrNone('SELECT * FROM train_routes WHERE starting_station=$1 AND finish_station=$2', [start_id, finish_id]);
 
 // const getScheduleByDepTime = (departure_time) => db.manyOrNone(`SELECT * FROM train_schedule WHERE departure_time = $1`, [departure_time])
 
-const postNewRoute = (starting_station, finish_station) => db.one(`INSERT INTO train_routes (starting_station, finish_station) VALUES ($1, $2) RETURNING *`, [starting_station, finish_station])
+const postNewRoute = (starting_station, finish_station) => db.one('INSERT INTO train_routes (starting_station, finish_station) VALUES ($1, $2) RETURNING *', [starting_station, finish_station]);
 
-
-const getScheduleFromToDepTime = (departure_time_from, departure_time_to) => db.manyOrNone(`SELECT * FROM train_schedule WHERE departure_time BETWEEN $1 AND $2`, [departure_time_from, departure_time_to])
-// const getSchedule = (a,b) => db.manyOrNone(`SELECT * FROM train_schedule WHERE train_id = $2`, [a, b])
-
-// const getSchedules = () => db.manyOrNone(`SELECT * FROM train_schedule`)
-
-// const getDelays = () => db.manyOrNone(`SELECT * FROM delays`)
 
 const deleteRouteFromID = (route_id) => {
-    /// Find train_IDs associated with route id 
-    return db.manyOrNone(`SELECT * FROM train_routes INNER JOIN train_schedule ON train_routes.route_id=train_schedule.route_id WHERE train_routes.route_id=$1`, [route_id]).then(result => {
-        const promises = []
-        result.forEach(elem => {
-           promises.push(
-            new Promise(function (res, rej) { 
+  /// Find train_IDs associated with route id 
+  return db.manyOrNone('SELECT * FROM train_routes INNER JOIN train_schedule ON train_routes.route_id=train_schedule.route_id WHERE train_routes.route_id=$1', [route_id]).then(result => {
+    const promises = [];
+    result.forEach(elem => {
+      promises.push(
+        new Promise(function (res) { 
                
-                // delete all train_ids from schedule and performance tables
-                res(db.query(`DELETE FROM performance WHERE train_id = $1`,[elem.train_id]).then(() => {
-                    db.query(`DELETE FROM train_schedule WHERE train_id = $1`, [elem.train_id])
-                }))
-            }
-           ) )
+          // delete all train_ids from schedule and performance tables
+          res(db.query('DELETE FROM performance WHERE train_id = $1',[elem.train_id]).then(() => {
+            db.query('DELETE FROM train_schedule WHERE train_id = $1', [elem.train_id]);
+          }));
+        }
+        ) );
            
-        })
+    });
         
-        return Promise.all(promises)
+    return Promise.all(promises);
          
        
-      // Delete from route table
-    }) .then(() => db.query(`DELETE FROM train_routes WHERE route_id = $1 RETURNING *`, [route_id]))
-}
+    // Delete from route table
+  }) .then(() => db.query('DELETE FROM train_routes WHERE route_id = $1 RETURNING *', [route_id]));
+};
 
 
 
@@ -58,4 +51,4 @@ const deleteRouteFromID = (route_id) => {
 
 // const putDelayArrivalTimeUpdate = (expected_arrival_time, delay_id) => db.oneOrNone(`UPDATE delays SET expected_arrival_time = $1 WHERE delay_id = $2 RETURNING *`, [expected_arrival_time, delay_id]);
 
-module.exports = {deleteRouteFromID, getRouteByStartFinishId, getStartStation, getStartStationByStartId, postNewRoute, getAllRoutes, getRouteByStartStation }
+module.exports = {deleteRouteFromID, getRouteByStartFinishId, getStartStation, getStartStationByStartId, postNewRoute, getAllRoutes, getRouteByStartStation };
