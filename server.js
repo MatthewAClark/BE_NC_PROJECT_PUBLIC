@@ -1,4 +1,8 @@
-process.env.NODE_ENV =  process.env.NODE_ENV || 'dev';
+/* eslint-disable no-console */
+if(!process.env.NODE_ENV)  process.env.NODE_ENV = 'dev';
+if(process.env.NODE_ENV !== 'production') require('dotenv').config({
+  path: `./.${process.env.NODE_ENV}.env`
+});
 
 // require the needed modules
 
