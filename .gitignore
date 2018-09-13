@@ -2,7 +2,9 @@
 node_modules
 DS_Store
 *.config.js
-/config
+/config/api.config.js
+/config/dev.js
+/config/test.js
 /data
 *.env
 .eslintrc.js
