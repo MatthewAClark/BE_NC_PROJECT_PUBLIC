@@ -8,5 +8,5 @@
 
 
 
-
+console.log(config)
 module.exports = pgp(config.db);
