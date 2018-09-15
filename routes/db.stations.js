@@ -14,6 +14,13 @@ router.get('/test', async (req, res) => {
     console.log('getting data test')
         try {
           const client = await pool.connect()
+          pool.connect().then(db => {
+            db.query('SELECT * FROM train_stations')
+            .then(result2 => {
+                console.log('this is result 2',result2)
+            });
+
+          })
           const result = await client.query('SELECT * FROM train_stations');
           const results = { 'results': (result) ? result.rows : null};
           console.log(results)
