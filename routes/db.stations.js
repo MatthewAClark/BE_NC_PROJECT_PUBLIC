@@ -5,6 +5,7 @@ const { removeStation, addNewStation, fetchStation, fetchStationById} = require(
 router.get('/', fetchStation);
 
 router.get('/test', async (req, res) => {
+    console.log('getting data test')
         try {
           const client = await pool.connect()
           const result = await client.query('SELECT * FROM test_table');
