@@ -26,6 +26,8 @@ const cors = require('cors');
 // Define routes
 const apiRoutes = require('./routes/apiRoutes.js');
 
+app.set('view engine', 'ejs')
+
 // corse
 app.use(cors());
 
