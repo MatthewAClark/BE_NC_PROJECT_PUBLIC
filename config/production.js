@@ -6,4 +6,5 @@ const pool = new Pool({
 });
 
 
-module.exports = {db: await pool.connect()}
+//module.exports = {db: await pool.connect()}
+module.exports = 'test'
