@@ -12,8 +12,8 @@ router.get('/', fetchStation);
 
 router.get('/test', async (req, res) => {
     console.log('getting data test')
-        try {
-          const client = await pool.connect()
+       // try {
+        //  const client = await pool.connect()
           pool.connect().then(db => {
             db.query('SELECT * FROM train_stations')
             .then(result2 => {
@@ -21,15 +21,15 @@ router.get('/test', async (req, res) => {
             });
 
           })
-          const result = await client.query('SELECT * FROM train_stations');
-          const results = { 'results': (result) ? result.rows : null};
-          console.log(results)
+         // const result = await client.query('SELECT * FROM train_stations');
+         // const results = { 'results': (result) ? result.rows : null};
+          //console.log(results)
          // res.render('pages/db', results );
           client.release();
-        } catch (err) {
+      //  } catch (err) {
           console.error(err);
           res.send("Error " + err);
-        }
+      //  }
       })
 
 
