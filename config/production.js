@@ -5,6 +5,6 @@ const pool = new Pool({
   ssl: true
 });
 
-
-//module.exports = {db: await pool.connect()}
-module.exports = 'test'
+db = await pool.connect()
+module.exports = {db}
+//module.exports = 'test'
