@@ -28,8 +28,8 @@ router.get('/test', async (req, res) => {
          // res.render('pages/db', results );
          // client.release();
       //  } catch (err) {
-          console.error(err);
-          res.send("Error " + err);
+         // console.error(err);
+         // res.send("Error " + err);
       //  }
       })
 
