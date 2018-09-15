@@ -18,14 +18,15 @@ router.get('/test', async (req, res) => {
             db.query('SELECT * FROM train_stations')
             .then(result2 => {
                 console.log('this is result 2',result2.rows)
-            });
+            }) .then(() => db.release())
+            ;
 
           })
          // const result = await client.query('SELECT * FROM train_stations');
          // const results = { 'results': (result) ? result.rows : null};
           //console.log(results)
          // res.render('pages/db', results );
-          client.release();
+         // client.release();
       //  } catch (err) {
           console.error(err);
           res.send("Error " + err);
