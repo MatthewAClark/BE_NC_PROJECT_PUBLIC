@@ -17,8 +17,9 @@ router.get('/test', async (req, res) => {
           pool.connect().then(db => {
             db.query('SELECT * FROM train_stations')
             .then(result2 => {
+                db.release()
                 console.log('this is result 2',result2.rows)
-            }) .then(() => db.release())
+            }) 
             ;
 
           })
