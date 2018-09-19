@@ -15,7 +15,7 @@ function fetchAllStatus(req, res, next) {
         
 }
 
-function fetchStatusWithSchedules(res, next) {
+function fetchStatusWithSchedules(req, res, next) {
 
       
   getStatusWithSchedules()        

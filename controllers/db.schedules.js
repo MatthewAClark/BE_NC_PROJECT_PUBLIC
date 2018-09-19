@@ -81,7 +81,7 @@ function addNewSchedule(req, res, next) {
 }
 
 
-function fetchAllSchedules(res, next) {
+function fetchAllSchedules(req, res, next) {
 
                
   getAllSchedules()
