@@ -40,6 +40,11 @@ const cronSchedule = (schedules) => {
   schedules.forEach(schedule => {
     let minutes = Number(schedule.departure_time.slice(3,5));
     let hours = Number(schedule.departure_time.slice(0, 2));
+
+    // Allow hour offset for BST with Heroku
+    if(process.env.NODE_ENV === 'production') {
+      if (hours === 23 ) hours = 00; else hours++
+    }
   
     // Subtract one minute off the departing time so that we don't miss the train on a fetch
     if (minutes === 0) {
