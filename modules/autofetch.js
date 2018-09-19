@@ -43,7 +43,7 @@ const cronSchedule = (schedules) => {
 
     // Allow hour offset for BST with Heroku
     if(process.env.NODE_ENV === 'production') {
-      if (hours === 23 ) hours = 00; else hours++
+      if (hours === 23 ) hours = 00; else hours--
     }
   
     // Subtract one minute off the departing time so that we don't miss the train on a fetch
