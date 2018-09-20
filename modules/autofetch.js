@@ -42,7 +42,9 @@ const cronSchedule = (schedules) => {
     let hours = Number(schedule.departure_time.slice(0, 2));
 
     // Allow hour offset for BST with Heroku
+    console.log(process.env.NODE_ENV)
     if(process.env.NODE_ENV === 'production') {
+      console.log('offset hour')
       if (hours === 23 ) hours = 00; else hours--
     }
   
@@ -126,7 +128,7 @@ const fetchStatusAndStore = (dep_time) => {
       // Fetch live from the API
       return fetchLiveStationsFromSchedules(schedules)
         .then(schedules => {
-
+        //  console.log(schedules)
           // Add to Database
           return addStatusToDB(schedules)
             .then(result => result);
