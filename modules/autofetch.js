@@ -40,7 +40,7 @@ const cronSchedule = (schedules) => {
   schedules.forEach(schedule => {
     let minutes = Number(schedule.departure_time.slice(3,5));
     let hours = Number(schedule.departure_time.slice(0, 2));
-
+console.log(getCurrentDateTime())
     // Allow hour offset for BST with Heroku
     // console.log(process.env.NODE_ENV)
     // if(process.env.NODE_ENV === 'production') {
