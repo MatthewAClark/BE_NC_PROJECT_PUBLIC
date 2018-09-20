@@ -121,6 +121,7 @@ const fetchStatusAndStore = (dep_time) => {
   // Fetch all times from db that depart at given time
   return getSchedulesWithStationByTime(dep_time)
     .then(schedules => {
+      console.log(schedules)
 
       // Fetch live from the API
       return fetchLiveStationsFromSchedules(schedules)
