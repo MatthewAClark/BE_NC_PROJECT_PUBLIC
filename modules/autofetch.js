@@ -40,13 +40,7 @@ const cronSchedule = (schedules) => {
   schedules.forEach(schedule => {
     let minutes = Number(schedule.departure_time.slice(3,5));
     let hours = Number(schedule.departure_time.slice(0, 2));
-console.log(getCurrentDateTime())
-    // Allow hour offset for BST with Heroku
-    // console.log(process.env.NODE_ENV)
-    // if(process.env.NODE_ENV === 'production') {
-    //   console.log('offset hour')
-    //   if (hours === 23 ) hours = 00; else hours--
-    // }
+
   
     // Subtract one minute off the departing time so that we don't miss the train on a fetch
     if (minutes === 0) {
@@ -75,7 +69,6 @@ console.log(getCurrentDateTime())
     minuteArr.forEach(minute => minute.sort((a, b) => a - b));
 
 
-    // console.log(`${hours}:${minutes}`)
   });
  
   // Create an array with the correct node-cron syntax
@@ -123,12 +116,11 @@ const fetchStatusAndStore = (dep_time) => {
   // Fetch all times from db that depart at given time
   return getSchedulesWithStationByTime(dep_time)
     .then(schedules => {
-      console.log(schedules)
 
       // Fetch live from the API
       return fetchLiveStationsFromSchedules(schedules)
         .then(schedules => {
-        //  console.log(schedules)
+   
           // Add to Database
           return addStatusToDB(schedules)
             .then(result => result);
