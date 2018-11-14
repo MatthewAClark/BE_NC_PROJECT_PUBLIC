@@ -1,9 +1,16 @@
 
 
-    
+
 const pgp = require('pg-promise')({promiseLib: Promise});
 
-const config = require(`./${process.env.NODE_ENV}.js`);
+
+const config = {
+    db: process.env.DATABASE_URL
+  
+  };
+  
+
+//const config = require(`./${process.env.NODE_ENV}.js`);
 
 
 

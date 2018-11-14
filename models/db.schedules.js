@@ -1,5 +1,6 @@
 const db = require('../config/index.js');
 
+
 const getAllSchedules = () => db.manyOrNone('SELECT * FROM train_schedule');
 
 const getScheduleById = (train_id) => db.oneOrNone('SELECT * FROM train_schedule WHERE train_id = $1', [train_id]);

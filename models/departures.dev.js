@@ -12,11 +12,8 @@ const api_station = require('../config/api.config').api_station;
 
 const getStationDepartures = (stationCode) => {
   return  axios.get(`${api_url}/train/station/${stationCode}/live.json?app_id=${api_id}&app_key=${api_key}&train_status=passenger&darwin=true`)
-    .then(res => res.data);
-  //    .then(userData => res.status(200).send(userData))
-  // return 'Hello'
-
-       
+    .then(res => res.data)
+      
 };
 
 const getStationTimetable = (station_from, station_to, date, time, offset) => {

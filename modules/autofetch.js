@@ -1,8 +1,11 @@
 /* eslint-disable no-console*/
 
+
 const { getLiveStation } = require(`../models/departures.${process.env.NODE_ENV}`); // For fetching from live API
+
 const { postStatus } = require('../models/db.js'); // 
 const { getSchedulesWithStationByTime } = require('../models/db.js');
+
 
 // import cron schedular
 const cron = require('node-cron');

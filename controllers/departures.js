@@ -5,7 +5,7 @@ const {getLiveStation, getStationData, getStationTimetable, getLiveRoute, getSta
 function fetchStationDepartures(req, res, next) {
   getStationDepartures(req.params.station_name)
     .then(departures => res.status(200).send(departures))
-    .catch(() => next({status: 400, error: 'Unable to fetch request'}));
+    .catch((err) => next({status: 400, error: 'Unable to fetch request'}));
 
 }
 
@@ -33,10 +33,9 @@ function fetchStationData(req, res, next) {
   getStationData(req.params.station_name)
     
     .then(station => {
-        
       res.status(200).send(station);
     })
-    .catch(() => next({status: 400, error: 'Unable to fetch request'}));
+    .catch((err) => next({status: 400, error: 'Unable to fetch request'}));
 }
 
 function fetchLiveRoute(req, res, next) {
