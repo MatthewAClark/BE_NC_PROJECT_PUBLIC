@@ -2,6 +2,8 @@
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -9,162 +11,192 @@
 </head>
 
 <body>
-    <h1>Personal Rail Travel API Page</h1>
+    <h1 class='title'>Personal Rail Travel API Page</h1>
     <p>The API is divided into two sections, live and db. The live section is used for fetching live API requests from
         the rail network for setting up new stations and routes. The db section is used for the stored train times, as
         well as performance statistics</p>
-    <h3>Live</h3>
+    <h2 class='title is-5'>Live</h2>
     <span>follows /api/live</span>
-    <table>
+    <table class='table is-striped is-fullwidth'>
         <tr>
-            <td>GET /route/?from=station_code&to=station_code</td>
+            <td>GET</td>
+            <td>/api/live/route/?from=station_code&to=station_code</td>
             <td>Fetch the live route between two stations</td>
         </tr>
 
 
         <tr>
-            <td>GET /service/:id</td>
+                <td>GET</td>
+            <td>/api/live/service/:id</td>
             <td>Returns data for a particular train service</td>
         </tr>
         <tr>
-            <td>GET
-                /station/route/?station_from=station_code&station_to=station_code&date=date_of_travel&time=time_of_travel&offset=hours</td>
+                <td>GET</td>
+            <td>
+                    /api/live/station/route/?station_from=station_code&station_to=station_code&date=date_of_travel&time=time_of_travel&offset=hours</td>
             <td>find route and times between two stations on a particular date and time</td>
         </tr>
 
         <tr>
-            <td>GET stationtimes/:station_name</td>
+                <td>GET</td>
+            <td>/api/livestationtimes/:station_name</td>
             <td>get live station departures from a particular station</td>
         </tr>
 
         <tr>
-            <td>GET /station/:station_name</td>
+                <td>GET</td>
+            <td>/api/live/station/:station_name</td>
             <td>Fetch station data</td>
         </tr>
 
     </table>
-    <h3>Schedules Database</h3>
+    <h2 class='title is-5'>Schedules Database</h2>
     <span>follows /api/db</span>
-    <table>
+    <table class='table is-striped is-fullwidth'>
 
         <tr>
 
             <!-- Schedules -->
-            <td>GET /schedules</td>
+            <td>GET</td>
+            <td>/api/db/schedules</td>
             <td>Fetches all train schedules</td>
         </tr>
         <tr>
-            <td>GET /schedules/?departure_time=time</td>
+                <td>GET</td>
+            <td>/api/db/schedules/?departure_time=time</td>
             <td>fetches a schedule at a specific departure time</td>
         </tr>
         <tr>
-            <td>GET /schedules/?departure_time_from=time&departure_time_to=time</td>
+                <td>GET</td>
+            <td>/api/db/schedules/?departure_time_from=time&departure_time_to=time</td>
             <td>Fetches all departures between a range of departure times</td>
         </tr>
 
         <tr>
-            <td>GET /schedules/time/routes/?from=time&to=time</td>
+                <td>GET</td>
+            <td>/api/db/schedules/time/routes/?from=time&to=time</td>
             <td>Fetch schedules of a certain route between different times</td>
         </tr>
         <tr>
-            <td>GET /schedules/id/:schedule_id</td>
+                <td>GET</td>
+            <td>/api/db/schedules/id/:schedule_id</td>
             <td>Fetch a schedule by it's ID</td>
         </tr>
         <tr>
-            <td>POST /schedules</td>
+                <td>POST</td>
+            <td>/api/db/schedules</td>
             <td>add a new schedule</td>
         </tr>
         <tr>
-            <td>GET /schedules/route/:route_id</td>
+                <td>GET</td>
+            <td> /api/db/schedules/route/:route_id</td>
             <td>fetch schedules by a route id</td>
         </tr>
         <tr>
-            <td>GET /schedules/route/:route_id/?departure_time_from=time&departure_time_to=time</td>
+                <td>GET</td>
+            <td>/api/db/schedules/route/:route_id/?departure_time_from=time&departure_time_to=time</td>
             <td>
                 fetch schedules by route id between different times
             </td>
         </tr>
         <tr>
-            <td>GET /schedules/all</td>
+                <td>GET</td>
+            <td>/api/db/schedules/all</td>
             <td>fetches all schedules stored in database</td>
         </tr>
         <tr>
-            <td>DELETE /schedules/:schedule_id</td>
+                <td>DELETE</td>
+            <td>/api/db/schedules/:schedule_id</td>
             <td>delete a schedule by schedule id</td>
         </tr>
     </table>
     <h3>Stations database</h3>
     <span>follows /api/db</span>
-    <table>
+    <table class='table is-striped is-fullwidth'>
         <!-- Stations -->
 
         <tr>
-            <td>GET /stations</td>
+                <td>GET</td>
+            <td>/api/db/stations</td>
             <td>fetch all stations</td>
         </tr>
         <tr>
-            <td>GET /stations/?code=station_code</td>
+                <td>GET</td>
+            <td>/api/db/stations/?code=station_code</td>
             <td>Fetch a station by station code</td>
         </tr>
         <tr>
-            <td>GET /stations/:station_id</td>
+                <td>GET</td>
+            <td>/api/db/stations/:station_id</td>
             <td>Fetch station by station id</td>
         </tr>
         <tr>
-            <td>POST /stations</td>
+                <td>POST</td>
+            <td>/api/db/stations</td>
             <td>add a new station</td>
         </tr>
         <tr>
-            <td>DELETE /staitons:station_id</td>
+                <td>DELETE</td>
+            <td>/api/db/staitons:station_id</td>
             <td>delete station by station id</td>
         </tr>
     </table>
     <h3>Routes Database</h3>
     <span>follows /api/db</span>
-    <table>
+    <table class='table is-striped is-fullwidth'>
         <tr>
-            <td>GET /routes</td>
+                <td>GET</td>
+            <td>/api/db/routes</td>
             <td>fetchallroutes</td>
         </tr>
         <tr>
-            <td>POST /routes</td>
+                <td>POST</td>
+            <td>/api/db/routes</td>
             <td>post a route</td>
         </tr>
         <tr>
-            <td>GET /routes/start</td>
+                <td>GET</td>
+            <td>/api/db/routes/start</td>
             <td>fetchStartStation</td>
         </tr>
         <tr>
-            <td>GET /routes/start/:start_id</td>
+                <td>GET</td>
+            <td>/api/db/routes/start/:start_id</td>
             <td>fetch start station by start id</td>
         </tr>
         <tr>
-            <td>DELETE /routes/:route_id</td>
+                <td>DELETE</td>
+            <td>/api/db/routes/:route_id</td>
             <td>Delete route by ID</td>
         </tr>
 
     </table>
     <h3>Train Performance Database</h3>
     <span>follows /api/db</span>
-    <table>
+    <table class='table is-striped is-fullwidth'>
         <tr>
-            <td>GET /status</td>
+                <td>GET</td>
+            <td>/api/db/status</td>
             <td>Fetch all train performances</td>
         </tr>
         <tr>
-            <td>GET /status/schedules</td>
+                <td>GET</td>
+            <td>/api/db/status/schedules</td>
             <td>Fetch all performance data along with the schedules</td>
         </tr>
         <tr>
-            <td>GET /status/:status_id</td>
+                <td>GET</td>
+            <td>/api/db/status/:status_id</td>
             <td>Fetch performance by ID</td>
         </tr>
         <tr>
-            <td>DELETE /status</td>
+                <td>DELETE</td>
+            <td>/api/db/status</td>
             <td>Delete a particular performance</td>
         </tr>
         <tr>
-            <td>POST /status</td>
+                <td>POST</td>
+            <td>/api/db/status</td>
             <td>Add new train performance data to the database</td>
         </tr>
     </table>
