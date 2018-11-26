@@ -35,34 +35,13 @@ You will need to set up your own account in order to use TransportAPI with this 
 * Dotenv
 
 ## Installing
-### PreSQL
+### SQL
 
-If running this on a Mac, you will need the Postgres app. This can be found here:
-#### Linux
-Install PostgreSQL
-```
-sudo apt-get install postgresql postgresql-contrib
-```
-Create database users
-```
-sudo -u postgres createuser --superuser $USER
-sudo -u postgres createdb $USER
-```
-Enter psql
-```
-psql
-```
-Create login by using your linux username for 'Username'
-```
-ALTER USER username WITH PASSWORD 'password'
-```
-Quit psql by
-```
-\q
-```
+You will need to download and install PostgreSQL, as this is used for maintaining the SQL database. It is available here along with the installation instructions:
 
-
-
+```
+https://www.postgresql.org/download/
+```
 #### Github
 Using the terminal, clone the repo from GitHub
 ```
@@ -160,4 +139,7 @@ npm run test
 ```
 These tests simulate API request for the various database endpoints. Before each test, the database is reseeded in order for consistency with the data used. At the end of every test, the database is disconnected.
 
-Supertest is used to simulate requests being made to the server, with Mocha providing the framework and Chai providing the assertion library. For more information, please visit the following:
+Supertest is used to simulate requests being made to the server, with Mocha providing the framework and Chai providing the assertion library. For more information on Supertest, please visit the following website:
+```
+https://www.npmjs.com/package/supertest
+```

@@ -21,14 +21,15 @@ const getAllSchedules = require('../models/db.schedules').getAllSchedules;
 const getLiveStation = require('../models/departures.test').getLiveStation;
 
 // db API endpoint test
+
 describe('db api endpoints', () => {
   describe('/api/db/stations', () => {
+    // Fetch all stations from DB
     it('Fetches all stations from our db', () => {
       return request(app) // run mock server
         .get('/api/db/stations')
         .expect(200)
         .then(res => {
-
           expect(res.body.length).to.equal(4);
           expect(res.body[0].station_name).to.equal('Liverpool South Parkway');
         });
@@ -43,12 +44,13 @@ describe('db api endpoints', () => {
     });
   });
 
+  // Test schedule db endpoints
   describe('/api/db/schedules/all', () => {
     it('GETs all scheduled data from the database', () => {
       // runs mock server
       return request(app)
       // get request to mock server
-        .get('/api/db/schedules/all')
+        .get('/api/db/schedules/')
       // supertest expect  - key on promise object
         .expect(200)
         .then((res) => {
@@ -155,7 +157,7 @@ describe('db api endpoints', () => {
 
           });
       });
-      describe.only('/api/db/schedules/1 - delete', () => {
+      describe('/api/db/schedules/1 - delete', () => {
         // it('fext schedule', () => {
 
         //     return request(app)
