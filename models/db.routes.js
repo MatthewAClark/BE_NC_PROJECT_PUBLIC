@@ -1,6 +1,9 @@
 const db = require('../config/index.js');
 
-const getAllRoutes = () => db.manyOrNone('SELECT * FROM train_routes');
+const getAllRoutes = () => {
+  
+  return db.manyOrNone('SELECT * FROM train_routes')
+};
 
 const getRouteByStartStation = (station_id) => db.manyOrNone('SELECT * FROM train_routes INNER JOIN train_stations ON train_stations.station_id=train_routes.finish_station WHERE train_routes.starting_station=$1', [station_id]);
 

@@ -49,12 +49,15 @@ function removeRouteFromId(req, res, next) {
     .catch(() => next({status: 404, error: 'Unable to fetch request'})) ;
 }
 
-function fetchAllRoutes(res, next) {
 
-        
+
+function fetchAllRoutes(req, res, next) {
   getAllRoutes()
-    .then(data => res.status(200).send(data))
-    .catch(() => next({status: 404, error: 'Unable to fetch request'})) ;
+  .then(data => res.status(200).send(data))
+  .catch(() => next({status: 404, error: 'Unable to fetch request'}));
+ 
+        
 }
+
 
 module.exports = {removeRouteFromId, fetchStartStation, fetchStartStationByStartId, addNewRoute, fetchAllRoutes, fetchRouteByStartStation };
