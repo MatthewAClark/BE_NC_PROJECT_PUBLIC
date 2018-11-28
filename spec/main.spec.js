@@ -94,39 +94,100 @@ describe('db api endpoints', () => {
   // **************************************************************************
 
   // Test routes database
-  describe.only('/api/db/routes', () => {
+  describe('/api/db/routes', () => {
+
+    // Fetches entire routes table
     it('Gets all /api/db/routes', () => {
       return request(app)
         .get('/api/db/routes/')
         .expect(200)
         .then((res) => {
-          console.log(res.body)
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(4);
+          expect(res.body[0].starting_station).to.equal(1);
+        })
+    })
+
+    // Fetches entire table but includes starting station retreived from stations table
+    it('Gets starting station from routes table /api/db/routes/start', () => {
+      return request(app)
+        .get('/api/db/routes/start')
+        .expect(200)
+        .then((res) => {
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(4);
+          expect(res.body[0].station_name).to.equal('Manchester Piccadilly');
+        })
+    })
+
+    // 
+    it('fetches start station by start ID', () => {
+      return request(app)
+        .get('/api/db/routes/start/1')
+        .expect(200)
+        .then((res) => {
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(1);
+          expect(res.body[0].station_name).to.equal('Manchester Piccadilly');
+        })
+    })
+
+
+    it('Posts a new route', () => {
+      return request(app) // run mock server
+        .post('/api/db/routes')
+        .send({
+          starting_station: 2,
+          finish_station: 1
+        })
+        .expect(201)
+        .then(res => {
+          // chai expect
+          expect(res.body).to.be.an('object');
+          expect(res.body.starting_station).to.equal(2);
+          expect(res.body.finish_station).to.equal(1);
+        });
+    })
+
+    it('Deletes a station', () => {
+      return request(app)
+        .delete('/api/db/routes/3')
+        .expect(201)
+        .then(res => {
+          expect(res.body).to.be.an('array')
+          expect(res.body[0].route_id).to.equal(3)
+          expect(res.body[0].starting_station).to.equal(4)
         })
     })
   })
 
 
+  // *******************************************************************************************
+  // Schedules
+  //
+  describe('/api/db/schedules', () => {
 
-
-
-  // Test schedule db endpoints
-  describe('/api/db/schedules/all', () => {
-    it('GETs all scheduled data from the database', () => {
-      // runs mock server
+    it('GETs all schedules', () => {
       return request(app)
-        // get request to mock server
         .get('/api/db/schedules/')
-        // supertest expect  - key on promise object
         .expect(200)
         .then((res) => {
-          // chai expect
-          expect(res.body).to.be.an('array');
-          expect(res.body.length).to.equal(8);
-          expect(res.body[0].train_uid).to.equal('Y23257');
-        });
+          expect(res.body).to.be.an('array')
+          expect(res.body.length).to.equal(8)
+          expect(res.body[0].train_uid).to.equal('Y23257')
+        })
+    })
 
-    });
+    it('GET a schedule by it`s ID', () => {
+      return request(app)
+        .get('/api/db/schedules/id/1')
+        .expect(200)
+        .then((res) => {
 
+          expect(res.body).to.be.an('object');
+          expect(res.body.train_uid).to.equal('Y23257');
+        })
+    })
 
     it('GETs schedule by dep time', () => {
       // runs mock server
@@ -142,8 +203,59 @@ describe('db api endpoints', () => {
           expect(res.body.length).to.equal(1);
           expect(res.body[0].train_uid).to.equal('Y23261');
         });
-
     });
+
+    it('GETs schedules with departure times from and to', () => {
+      return request(app)
+        .get('/api/db/schedules/?departure_time_from=13:00:00&departure_time_to=15:00:00')
+        .expect(200)
+        .then((res) => {
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(4);
+          expect(res.body[0].train_uid).to.equal('Y23261');
+        })
+    })
+
+
+    it('GET schedules between different times that includes routes', () => {
+      return request(app)
+        .get('/api/db/schedules/time/routes/?from=13:00:00&to=17:00:00')
+        .expect(200)
+        .then((res) => {
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(5);
+          expect(res.body[0].train_uid).to.equal('Y23261');
+          expect(res.body[0].starting_station).to.equal(2);
+          expect(res.body[0].finish_station).to.equal(3);
+        })
+    })
+
+    it('Fetches schedules by a route ID', () => {
+      return request(app)
+        .get('/api/db/schedules/route/1')
+        .expect(200)
+        .then((res) => {
+
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(3);
+          expect(res.body[0].train_departure_origin).to.equal('Liverpool South Parkway');
+
+        })
+    })
+
+    it('Fetches schedules by a route ID between two different times', () => {
+      return request(app)
+        .get('/api/db/schedules/route/1/?departure_time_from=13:00:00&departure_time_to=15:00:00')
+        .expect(200)
+        .then((res) => {
+
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(1);
+          expect(res.body[0].train_uid).to.equal('Y23330');
+
+        })
+    })
+
     it('POSTs a new train to the schedule db', () => {
       // runs mock server
       return request(app)
@@ -168,12 +280,27 @@ describe('db api endpoints', () => {
 
           expect(res.body.train_uid).to.equal('C40123');
         });
+
     });
 
+
+    it('Deletes a train schedule from the database', () => {
+      return request(app)
+        .delete('/api/db/schedules/3')
+        .expect(201)
+        .then(res => {
+          expect(res.body).to.be.an('array')
+          expect(res.body.length).to.equal(1)
+          expect(res.body[0].train_uid).to.equal('C67117')
+
+        })
+    })
   });
 
+  // ***************** Train Performance (status)
+
   describe('/api/db/status', () => {
-    it('GETs all train`s status from the performance db', () => {
+    it('GETs all train`s performances from the performance db', () => {
       // runs mock server
       return request(app)
         // get request to mock server
@@ -186,6 +313,38 @@ describe('db api endpoints', () => {
           expect(res.body).to.be.an('array');
           expect(res.body.length).to.equal(7);
           expect(res.body[0].train_id).to.equal(2);
+        });
+    });
+
+    it('GETs one train performance from the performance db', () => {
+      // runs mock server
+      return request(app)
+        // get request to mock server
+        .get('/api/db/status/1')
+        // supertest expect  - key on promise object
+        .expect(200)
+        .then((res) => {
+          // chai expect
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(1);
+          expect(res.body[0].train_id).to.equal(2);
+        });
+    });
+
+    it('GETs all train`s status along with the schedules from the performance db', () => {
+      // runs mock server
+      return request(app)
+        // get request to mock server
+        .get('/api/db/status/schedules')
+        // supertest expect  - key on promise object
+        .expect(200)
+        .then((res) => {
+
+
+          // chai expect
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(7);
+          expect(res.body[0].train_uid).to.equal('Y23261');
         });
     });
 
@@ -212,12 +371,23 @@ describe('db api endpoints', () => {
         });
     });
 
-
-  });
-
+    it('DELETES a train performance from the database', () => {
+      return request(app)
+      .delete('/api/db/status/?train_id=3')
+      .expect(201)
+      .then((res) => {
+        expect(res.body).to.be.an('array');
+        expect(res.body.length).to.equal(2);
+        expect(res.body[0].performance_id).to.equal(2);
+        expect(res.body[1].performance_id).to.equal(7);
+      })
+    })
+  })
 });
 
-describe('Live API Test', () => {
+
+// This test uses a JSON file taken from an API fetch to Transport API, in order so we can use it in our tests.
+describe.only('Live API Test', () => {
   describe('/api/route/?from=MAN&to=LPY', () => {
     it('GETs all live schedules from a station to another station', () => {
       // runs mock server

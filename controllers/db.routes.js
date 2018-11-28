@@ -18,7 +18,7 @@ function fetchStartStationByStartId(req, res, next) {
 
 }
 
-function fetchStartStation(res, next) {
+function fetchStartStation(req, res, next) {
   getStartStation()
     .then(data => res.status(200).send(data))
     .catch(() => next({status: 404, error: 'Unable to fetch request'})); 

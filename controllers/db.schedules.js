@@ -23,7 +23,7 @@ function fetchSchedulesByRouteID(req, res, next) {
 
 function fetchSchedulesAndRoutesByTime(req, res, next) {
 
-  if(req.query.from) {
+  if(req.query.from && req.query.to) {
 
     getSchedulesAndRoutesByTime(req.query.from, req.query.to)
       .then(data => res.status(200).send(data))

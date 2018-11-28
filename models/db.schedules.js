@@ -22,7 +22,7 @@ const getSchedulesByRouteID = (route_id) => db.manyOrNone('SELECT * FROM train_s
 
 const getScheduleFromToDepTime = (departure_time_from, departure_time_to) => db.manyOrNone('SELECT * FROM train_schedule WHERE departure_time BETWEEN $1 AND $2', [departure_time_from, departure_time_to]);
 
-const deleteSchedule = (train_id) => db.query('DELETE FROM performance WHERE train_id = $1', [train_id]).then(() =>  db.query('DELETE FROM train_schedule WHERE train_id = $1', [train_id]));
+const deleteSchedule = (train_id) => db.query('DELETE FROM performance WHERE train_id = $1', [train_id]).then(() =>  db.query('DELETE FROM train_schedule WHERE train_id = $1 RETURNING *', [train_id]));
     
    
 

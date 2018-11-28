@@ -53,10 +53,10 @@ INSERT INTO train_stations (station_name, station_code, user_station_type)
 
 INSERT INTO train_routes (starting_station, finish_station)
     VALUES (1, 2),
-    (2,1),
     (2,3),
     (4,3),
     (3,2);
+
 
 INSERT INTO train_schedule (train_uid, train_departure_origin, train_arrival_destination, arrival_time, departure_time, train_operator, route_id)
     VALUES ('Y23257', 'Manchester Airport', 'Liverpool South Parkway', '12:08', '12:09', 'Northern Rail', 2), 
@@ -66,8 +66,10 @@ INSERT INTO train_schedule (train_uid, train_departure_origin, train_arrival_des
             ('C66956','Liverpool South Parkway', 'Norwich', null, '12:03', 'East Midlands Trains', 1),
             ('Y23326', 'Liverpool South Parkway', 'Manchester Airport', null, '12:20', 'East Midlands Trains', 1),
             ('Y23330','Liverpool South Parkway', 'Manchester Airport', null, '13:20', 'Northern Rail', 1),
-             ('C76193', 'Plymouth', 'Newcastle', '12:22', '12:24', 'Crosscountry', 4),
-              ('C76193', 'Plymouth', 'Leeds', '12:58', '12:59', 'Crosscountry', 4);
+             ('C76193', 'Plymouth', 'Newcastle', '14:22', '14:24', 'Crosscountry', 4),
+              ('C76193', 'Plymouth', 'Leeds', '16:58', '16:59', 'Crosscountry', 4);
+
+
             
 
 INSERT INTO performance (schedule_date, expected_date_departure, expected_arrival_time, expected_departure_time, train_status, train_id)
