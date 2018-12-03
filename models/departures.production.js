@@ -38,7 +38,9 @@ const getLiveRoute = (from, to) => {
 };
 
 const getTrainServiceLive = (train_uid, date) => {
-  return axios.get(`${api_url}/train/service/train_uid:${train_uid}/${date}//timetable.json?app_id=${api_id}&app_key=${api_key}&live=true`);
+  console.log('here in model')
+  return axios.get(`${api_url}/train/service/train_uid:Y23255/2018-28-11//timetable.json?app_id=${api_id}&app_key=${api_key}&live=true`);
+  //return axios.get(`${api_url}/train/service/train_uid:${train_uid}/${date}//timetable.json?app_id=${api_id}&app_key=${api_key}&live=true`);
 
 };
 

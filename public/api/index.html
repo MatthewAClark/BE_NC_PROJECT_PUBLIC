@@ -21,14 +21,14 @@
         <tr>
             <td>GET</td>
             <td>/api/live/route/?from=station_code&to=station_code</td>
-            <td>Fetch the live route between two stations</td>
+            <td>Fetches all the live schedules (happening now) between two stations</td>
         </tr>
 
 
         <tr>
                 <td>GET</td>
-            <td>/api/live/service/:id</td>
-            <td>Returns data for a particular train service</td>
+            <td>/api/live/service/:id?date=date_of_service_departure</td>
+            <td>Returns live data for a particular train service on a particular date using the train's UID</td>
         </tr>
         <tr>
                 <td>GET</td>
@@ -39,7 +39,7 @@
 
         <tr>
                 <td>GET</td>
-            <td>/api/livestationtimes/:station_name</td>
+            <td>/api/live/station/route/:station_name</td>
             <td>get live station departures from a particular station</td>
         </tr>
 
@@ -59,7 +59,7 @@
             <!-- Schedules -->
             <td>GET</td>
             <td>/api/db/schedules</td>
-            <td>Fetches all train schedules</td>
+            <td>Fetches all train schedules stored in the database</td>
         </tr>
         <tr>
                 <td>GET</td>
@@ -85,7 +85,7 @@
         <tr>
                 <td>POST</td>
             <td>/api/db/schedules</td>
-            <td>add a new schedule</td>
+            <td>adds a new schedule</td>
         </tr>
         <tr>
                 <td>GET</td>
@@ -147,22 +147,22 @@
         <tr>
                 <td>GET</td>
             <td>/api/db/routes</td>
-            <td>fetchallroutes</td>
+            <td>Fetches all the routes from the database</td>
         </tr>
         <tr>
                 <td>POST</td>
             <td>/api/db/routes</td>
-            <td>post a route</td>
+            <td>post a route to the database</td>
         </tr>
         <tr>
                 <td>GET</td>
             <td>/api/db/routes/start</td>
-            <td>fetchStartStation</td>
+            <td>fetches all routes which also includes start station from the station's table</td>
         </tr>
         <tr>
                 <td>GET</td>
             <td>/api/db/routes/start/:start_id</td>
-            <td>fetch start station by start id</td>
+            <td>fetch all routes departing from a starting station</td>
         </tr>
         <tr>
                 <td>DELETE</td>

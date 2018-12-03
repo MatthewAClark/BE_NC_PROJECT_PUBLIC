@@ -21,8 +21,8 @@ const getLiveRoute = (from, to) => {
 const getTrainServiceLive = (train_uid) => {
  
   return new Promise(function (res) {
-    if(train_uid === 'Y23259') {
-      res(readjson.sync('./data/live.service.test.json'));
+    if(train_uid === 'Y23255') {
+      res({data: readjson.sync('./data/test/liveService.json')});
     }
     if(train_uid === 'Y12345') {
       res(readjson.sync('./data/live.service.test.1.json'));
@@ -31,6 +31,12 @@ const getTrainServiceLive = (train_uid) => {
   
   });
 };
+
+const getStationTimetable = (station_from,  station_to, date, time, offset) => {
+  return new Promise(function (res) {
+    res(readjson.sync('./data/test/stationTimetable.json'));
+  })
+}
 
 const getStationData = (station_name) => {
 
@@ -52,4 +58,4 @@ const getLiveStation = (station_code) => {
 
   
 
-module.exports = {getLiveRoute, getLiveStation, getServiceRoute, getStationData, getTrainServiceLive };
+module.exports = {getStationTimetable, getLiveRoute, getLiveStation, getServiceRoute, getStationData, getTrainServiceLive };

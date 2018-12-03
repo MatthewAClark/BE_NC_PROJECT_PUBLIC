@@ -17,14 +17,14 @@ function fetchStationTimetable(req, res, next) {
     .catch(() => next({status: 400, error: 'Unable to fetch request'}));
 }
 
-function fetchTrainService(req, next) {
+function fetchTrainService(req, res, next) {
 
-  getTrainServiceLive(req.params.id, req.query.date)
-    .then(res => {
 
-      res.status(200).send(res.data);
-    })
-    .catch(() => next({status: 400, error: 'Unable to fetch request'}));
+   getTrainServiceLive(req.params.id, req.query.date)
+     .then(result => {
+      return res.status(200).send(result.data)}
+      )
+     .catch(() => next({status: 400, error: 'Unable to fetch request'}));
 
 }
 
@@ -39,9 +39,10 @@ function fetchStationData(req, res, next) {
 }
 
 function fetchLiveRoute(req, res, next) {
+  
   getLiveRoute(req.query.from, req.query.to)
     .then(live => res.status(200).send(live))
-    .catch(() => next({status: 400, error: 'Unable to fetch request'}));
+    .catch((err) => console.log(err)) //next({status: 400, error: 'Unable to fetch request'}));
 }
 
 function fetchLiveStation(req, res, next) {

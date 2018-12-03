@@ -20,9 +20,9 @@ const cronSetup = require('../modules/autofetch').cronSetup;
 const getAllSchedules = require('../models/db.schedules').getAllSchedules;
 const getLiveStation = require('../models/departures.test').getLiveStation;
 
-// db API endpoint test
+// db API GET request endpoint test
 
-describe('db api endpoints', () => {
+describe('db api GET endpoints', () => {
 
   // Stations
   describe('/api/db/stations', () => {
@@ -59,41 +59,13 @@ describe('db api endpoints', () => {
         });
     });
 
-    it('Posts a new station', () => {
-      return request(app) // run mock server
-        .post('/api/db/stations')
-        .send({
-          station_name: 'Sheffield',
-          station_code: 'SHF',
-          user_station_type: 'Lesure'
 
-        })
-        .expect(201)
-        .then(res => {
-
-          // chai expect
-          expect(res.body).to.be.an('object');
-          expect(res.body.station_id).to.equal(5)
-          expect(res.body.station_name).to.equal('Sheffield');
-        });
-    })
-
-    it('Deletes a station', () => {
-      return request(app)
-        .delete('/api/db/stations/4')
-        .expect(201)
-        .then(res => {
-          expect(res.body).to.be.an('array')
-          expect(res.body[0].station_id).to.equal(4)
-          expect(res.body[0].station_name).to.equal('Exeter St Davids')
-        })
-    })
 
 
   });
   // **************************************************************************
 
-  // Test routes database
+  // routes database
   describe('/api/db/routes', () => {
 
     // Fetches entire routes table
@@ -133,32 +105,7 @@ describe('db api endpoints', () => {
     })
 
 
-    it('Posts a new route', () => {
-      return request(app) // run mock server
-        .post('/api/db/routes')
-        .send({
-          starting_station: 2,
-          finish_station: 1
-        })
-        .expect(201)
-        .then(res => {
-          // chai expect
-          expect(res.body).to.be.an('object');
-          expect(res.body.starting_station).to.equal(2);
-          expect(res.body.finish_station).to.equal(1);
-        });
-    })
 
-    it('Deletes a station', () => {
-      return request(app)
-        .delete('/api/db/routes/3')
-        .expect(201)
-        .then(res => {
-          expect(res.body).to.be.an('array')
-          expect(res.body[0].route_id).to.equal(3)
-          expect(res.body[0].starting_station).to.equal(4)
-        })
-    })
   })
 
 
@@ -256,48 +203,9 @@ describe('db api endpoints', () => {
         })
     })
 
-    it('POSTs a new train to the schedule db', () => {
-      // runs mock server
-      return request(app)
-
-
-        //get request to mock server
-        .post('/api/db/schedules')
-        .send({
-          train_uid: 'C40123',
-          train_departure_origin: 'Manchester Airport',
-          train_arrival_destination: 'Liverpool South Parkway',
-          departure_time: '15:18',
-          arrival_time: '15:15',
-          train_operator: 'Great Northern Railway',
-          route_id: 2
-        })
-        // supertest expect  - key on promise object
-        .expect(201)
-        .then(res => {
-          // chai expect
-          expect(res.body).to.be.an('object');
-
-          expect(res.body.train_uid).to.equal('C40123');
-        });
-
-    });
-
-
-    it('Deletes a train schedule from the database', () => {
-      return request(app)
-        .delete('/api/db/schedules/3')
-        .expect(201)
-        .then(res => {
-          expect(res.body).to.be.an('array')
-          expect(res.body.length).to.equal(1)
-          expect(res.body[0].train_uid).to.equal('C67117')
-
-        })
-    })
-  });
-
-  // ***************** Train Performance (status)
+  })
+  // ***************** 
+  // Train Performance (status)
 
   describe('/api/db/status', () => {
     it('GETs all train`s performances from the performance db', () => {
@@ -373,57 +281,183 @@ describe('db api endpoints', () => {
 
     it('DELETES a train performance from the database', () => {
       return request(app)
-      .delete('/api/db/status/?train_id=3')
-      .expect(201)
-      .then((res) => {
-        expect(res.body).to.be.an('array');
-        expect(res.body.length).to.equal(2);
-        expect(res.body[0].performance_id).to.equal(2);
-        expect(res.body[1].performance_id).to.equal(7);
-      })
+        .delete('/api/db/status/?train_id=3')
+        .expect(201)
+        .then((res) => {
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(2);
+          expect(res.body[0].performance_id).to.equal(2);
+          expect(res.body[1].performance_id).to.equal(7);
+        })
     })
   })
 });
 
+describe('db api DELETE and POST endpoints', () => {
+  describe('db station', () => {
+    it('Posts a new station', () => {
+      return request(app) // run mock server
+        .post('/api/db/stations')
+        .send({
+          station_name: 'Sheffield',
+          station_code: 'SHF',
+          user_station_type: 'Lesure'
 
-// This test uses a JSON file taken from an API fetch to Transport API, in order so we can use it in our tests.
-describe.only('Live API Test', () => {
-  describe('/api/route/?from=MAN&to=LPY', () => {
-    it('GETs all live schedules from a station to another station', () => {
+        })
+        .expect(201)
+        .then(res => {
+
+          // chai expect
+          expect(res.body).to.be.an('object');
+          expect(res.body.station_id).to.equal(5)
+          expect(res.body.station_name).to.equal('Sheffield');
+        });
+    })
+
+    it('Deletes a station', () => {
+      return request(app)
+        .delete('/api/db/stations/4')
+        .expect(201)
+        .then(res => {
+          expect(res.body).to.be.an('array')
+          expect(res.body[0].station_id).to.equal(4)
+          expect(res.body[0].station_name).to.equal('Exeter St Davids')
+        })
+    })
+  })
+
+
+  /// 
+  describe('db route', () => {
+    it('Posts a new route', () => {
+      return request(app) // run mock server
+        .post('/api/db/routes')
+        .send({
+          starting_station: 2,
+          finish_station: 1
+        })
+        .expect(201)
+        .then(res => {
+          // chai expect
+          expect(res.body).to.be.an('object');
+          expect(res.body.starting_station).to.equal(2);
+          expect(res.body.finish_station).to.equal(1);
+        });
+    })
+
+    it('Deletes a route', () => {
+      return request(app)
+        .delete('/api/db/routes/4')
+        .expect(201)
+        .then(res => {
+          expect(res.body).to.be.an('array')
+          expect(res.body[0].route_id).to.equal(4)
+          expect(res.body[0].starting_station).to.equal(3)
+        })
+    })
+  })
+
+  describe('db schedule', () => {
+    it('POSTs a new train to the schedule db', () => {
       // runs mock server
       return request(app)
-        // get request to mock server
-        .get('/api/live/route/?from=MAN&to=LPY')
-        // supertest expect  - key on promise object
-        .expect(200)
-        .then((res) => {
 
-          expect(res.body.station_name).to.equal('Manchester Piccadilly');
-          expect(res.body.departures.all[0].destination_name).to.equal('Liverpool Lime Street (High Level)');
+
+        //get request to mock server
+        .post('/api/db/schedules')
+        .send({
+          train_uid: 'C40123',
+          train_departure_origin: 'Manchester Airport',
+          train_arrival_destination: 'Liverpool South Parkway',
+          departure_time: '15:18',
+          arrival_time: '15:15',
+          train_operator: 'Great Northern Railway',
+          route_id: 2
+        })
+        // supertest expect  - key on promise object
+        .expect(201)
+        .then(res => {
+          // chai expect
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.train_uid).to.equal('C40123');
         });
 
     });
-  });
 
-  describe('/api/live/station/Leeds', () => {
-    it('GET Station data', () => {
-      // runs mock server
+
+    it('Deletes a train schedule from the database', () => {
       return request(app)
-        // get request to mock server
-        .get('/api/live/station/Leeds')
-        // supertest expect  - key on promise object
-        .expect(200)
-        .then((res) => {
+        .delete('/api/db/schedules/3')
+        .expect(201)
+        .then(res => {
+          expect(res.body).to.be.an('array')
+          expect(res.body.length).to.equal(1)
+          expect(res.body[0].train_uid).to.equal('C67117')
 
-          expect(res.body.member[0].name).to.equal('Leeds');
-          expect(res.body.member[0].station_code).to.equal('LDS');
-        });
+        })
+    })
+  })
 
-    });
-  });
 });
 
-/*  */
+
+
+
+// This test uses a JSON file taken from an API fetch to Transport API, in order so we can use it in our tests.
+describe('Live API Test', () => {
+
+  it('GETs all live schedules from a station to another station', () => {
+    // runs mock server
+    return request(app)
+      // get request to mock server
+      .get('/api/live/route/?from=MAN&to=LPY')
+      // supertest expect  - key on promise object
+      .expect(200)
+      .then((res) => {
+
+        expect(res.body.station_name).to.equal('Manchester Piccadilly');
+        expect(res.body.departures.all[0].destination_name).to.equal('Liverpool Lime Street (High Level)');
+      });
+
+  });
+
+  it('Gets /api/live/service/:service_Id?date=2018-12-03', () => {
+    // runs mock server
+    return request(app)
+      // get request to mock server
+      .get('/api/live/service/Y23255 ')
+      // supertest expect  - key on promise object
+      .expect(200)
+      .then((res) => {
+        //  console.log(res.body)
+        expect(res.body.train_uid).to.equal('Y23255');
+        // expect(res.body.departures.all[0].destination_name).to.equal('Liverpool Lime Street (High Level)');
+      });
+  });
+
+  it('Fetch /api/live/station/route/?station_from= &station_to= &date= &time= &offset=', () => {
+    // runs mock server
+    return request(app)
+      // get request to mock server
+      .get('/api/live/station/route/?station_from=MAN&station_to=LPY&date=2018-11-30&time=10:00&offset=02:00')
+      // supertest expect  - key on promise object
+      .expect(200)
+      .then((res) => {
+        expect(res.body).to.be.an('object')
+        expect(res.body.departures.all).to.be.an('array')
+        expect(res.body.departures.all.length).to.equal(4)
+        expect(res.body.station_code).to.equal('MAN')
+        expect(res.body.departures.all[0].train_uid).to.equal('Y23249')
+      });
+  });
+
+
+
+});
+
+
+/*  These tests bypass the API */
 
 describe('Procedures for fetching and posting train data for backend status checks', () => {
   describe('getAllSchedules', () => {
@@ -471,6 +505,7 @@ describe('Procedures for fetching and posting train data for backend status chec
   });
 });
 
+// Tests for backend procedures for updating status database with train performances
 describe('Procedures for creating cron scheduling', () => {
   describe('cronSchedule', () => {
     it('Returns the correct syntax to work with node-cron schedular', () => {

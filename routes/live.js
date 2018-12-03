@@ -11,6 +11,7 @@ const router = express.Router();
 //router.get('/station/:id', fetchStationDepartures);
 
 router.get('/route/', fetchLiveRoute); 
+
 router.get('/service/:id', fetchTrainService);
 
 router.get('/station/route/', fetchStationTimetable);
