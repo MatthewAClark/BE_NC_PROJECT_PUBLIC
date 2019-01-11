@@ -1,4 +1,4 @@
-const {getStationByCode, deleteStation, postStation, getAllStations, getStationById} = require('../models/db.stations');
+const {seedStation, getStationByCode, deleteStation, postStation, getAllStations, getStationById} = require('../models/db.stations');
 
 function fetchStationById(req, res, next) {
    
@@ -40,10 +40,13 @@ function addNewStation(req, res, next) {
         
 }
 
+ 
+
+
 function removeStation(req, res, next) {
    
   deleteStation(req.params.station_id)
     .then(data => res.status(201).send(data))
     .catch(() => next({status: 400, error: 'Unable to delete station'}));
 }
-module.exports = {fetchStation, removeStation, addNewStation,  fetchStationById};
+module.exports = { fetchStation, removeStation, addNewStation,  fetchStationById};

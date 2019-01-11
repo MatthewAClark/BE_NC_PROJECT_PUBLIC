@@ -17,6 +17,7 @@ const getRouteByStartFinishId = (start_id, finish_id) => db.oneOrNone('SELECT * 
 
 const postNewRoute = (starting_station, finish_station) => db.one('INSERT INTO train_routes (starting_station, finish_station) VALUES ($1, $2) RETURNING *', [starting_station, finish_station]);
 
+const seedNewRoute = (route_id, starting_station, finish_station) => db.one('INSERT INTO train_routes (route_id, starting_station, finish_station) VALUES ($1, $2, $3) RETURNING *', [route_id, starting_station, finish_station]);
 
 const deleteRouteFromID = (route_id) => {
   /// Find train_IDs associated with route id 
@@ -54,4 +55,4 @@ const deleteRouteFromID = (route_id) => {
 
 // const putDelayArrivalTimeUpdate = (expected_arrival_time, delay_id) => db.oneOrNone(`UPDATE delays SET expected_arrival_time = $1 WHERE delay_id = $2 RETURNING *`, [expected_arrival_time, delay_id]);
 
-module.exports = {deleteRouteFromID, getRouteByStartFinishId, getStartStation, getStartStationByStartId, postNewRoute, getAllRoutes, getRouteByStartStation };
+module.exports = {seedNewRoute, deleteRouteFromID, getRouteByStartFinishId, getStartStation, getStartStationByStartId, postNewRoute, getAllRoutes, getRouteByStartStation };

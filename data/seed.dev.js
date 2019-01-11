@@ -1,48 +1,60 @@
 process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 
 const readjson = require('readjson');
-const { postNewSchedule } = require('../models/db.schedules.js');
+
+const { seedStation } = require('../models/db.stations.js');
+const { seedNewRoute } = require('../models/db.routes.js');
+const { seedNewSchedule } = require('../models/db.schedules.js');
+const { seedNewStatus } = require('../models/db.status.js');
+
 
 //const seedData = () => {
-const schedules1 = (readjson.sync('./data/schedules.dev.1.json'));
-const schedules2 = (readjson.sync('./data/schedules.dev.2.json'));
+const stations = (readjson.sync('./data/development/stations.json'));
+const routes = (readjson.sync('./data/development/routes.json'));
+const schedules = (readjson.sync('./data/development/schedules.json'));
+const status = (readjson.sync('./data/development/status.json'));
+
 //const delays = (readjson.sync('./data/delay_data/allDelays.json'));
 
-let Promises = [];
-schedules1.departures.all.forEach(elem => {
-  Promises.push(new Promise(function (res) {
-    res(postNewSchedule(elem.train_uid, elem.origin_name, elem.destination_name, elem.aimed_arrival_time, elem.aimed_departure_time, elem.operator_name, 2));
+
+Promise.all(stations.map(elem => {
+  return (new Promise(function (res) {
+  //const result = 
+  
+   res(seedStation(elem.station_id, elem.station_name, elem.station_code, null));
+   //res(console.log('you should see this afterwards'))
+   
   }));
+ 
 
-});
+})).then(() => {
+  Promise.all(routes.map(elem => {
+    return (new Promise(function (res) {
+      
+      res(seedNewRoute(elem.route_id, elem.starting_station, elem.finish_station));
+      
+    }));
+  
+  }))
+}).then(() => {
+  Promise.all(schedules.map(elem => {
+    return (new Promise(function (res) {
+    
+   res(seedNewSchedule(elem.train_id, elem.train_uid, elem.train_departure_origin, elem.train_arrival_destination, elem.arrival_time, elem.departure_time, elem.train_operator, elem.route_id))
+     
+    }));
+  
+  }))
+}).then(() => {
+  Promise.all(status.map(elem => {
+    return (new Promise(function (res) {
+     // console.log(elem)
+      res(seedNewStatus(elem.performance_id, elem.schedule_date, elem.expected_date_departure, elem.expected_arrival_time, elem.expected_departure_time, elem.train_status, elem.train_id))
+      
+    }));
+  
+  }))
+})
 
-schedules2.departures.all.forEach(elem => {
-  Promises.push(new Promise(function (res) {
-    res(postNewSchedule(elem.train_uid, elem.origin_name, elem.destination_name, elem.aimed_arrival_time, elem.aimed_departure_time, elem.operator_name, 1));
-    //console.log('scheds2', elem)
-  }));
-
-});
-Promise.all(Promises);
-//   .then(() => {
-//     Promises2 = []
-// console.log(delays)
-//     delays.forEach(elem => {
-//       Promises2.push(new Promise(function (res, rej) {
-//         // console.log(elem)
-//         res(postNewDelay(elem.date_of_delay, elem.expected_date_departure, elem.expected_arrival_time, elem.expected_departure_time, elem.cancelled, elem.train_id))
-//       }))
-//     })
-//     console.log('delays')
-//     postNewDelay('2018-09-07', '2018-09-07', '16:05','16:07', 'false', 1)
-//     Promise.all(Promises2)
-//   })
 
 
-
-
-
-// "dev": 
-//}
-
-//module.exports = { seedData }

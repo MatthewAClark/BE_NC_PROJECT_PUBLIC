@@ -4,6 +4,7 @@ if(process.env.NODE_ENV !== 'production') require('dotenv').config({
   path: `./.${process.env.NODE_ENV}.env`
 });
 
+require('./data/seed.dev.js')
 // require the needed modules
 
 const {getAllSchedules} = require('./models/db.schedules');

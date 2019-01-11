@@ -10,6 +10,8 @@ const getStatusWithSchedules = () => db.manyOrNone('SELECT * FROM performance IN
 
 const postNewStatus = (schedule_date, expected_date_departure, expected_arrival_time, expected_departure_time, train_status, train_id) => db.one('INSERT INTO performance (schedule_date, expected_date_departure,expected_arrival_time, expected_departure_time, train_status, train_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *', [schedule_date, expected_date_departure, expected_arrival_time, expected_departure_time, train_status, train_id]);
 
+const seedNewStatus = (performance_id, schedule_date, expected_date_departure, expected_arrival_time, expected_departure_time, train_status, train_id) => db.one('INSERT INTO performance (performance_id, schedule_date, expected_date_departure,expected_arrival_time, expected_departure_time, train_status, train_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *', [performance_id, schedule_date, expected_date_departure, expected_arrival_time, expected_departure_time, train_status, train_id]);
+
 const deleteStatusWithTrainID = (train_id) => 
   db.query('DELETE FROM performance USING train_schedule WHERE train_schedule.train_id = performance.train_id AND train_schedule.train_id=$1 RETURNING *', [train_id]);
     
@@ -21,4 +23,4 @@ const deleteStatusWithTrainID = (train_id) =>
 
 // const putStatusArrivalTimeUpdate = (expected_arrival_time, Status_id) => db.oneOrNone(`UPDATE Status SET expected_arrival_time = $1 WHERE Status_id = $2 RETURNING *`, [expected_arrival_time, Status_id]);
 
-module.exports = {deleteStatusWithTrainID, getStatusWithSchedules, getStatusByTrainId, getStatusById, getAllStatus, postNewStatus};
+module.exports = {seedNewStatus, deleteStatusWithTrainID, getStatusWithSchedules, getStatusByTrainId, getStatusById, getAllStatus, postNewStatus};

@@ -9,6 +9,8 @@ const getScheduleByDepTime = (departure_time) => db.manyOrNone('SELECT * FROM tr
 
 const postNewSchedule = (train_uid, train_departure_origin, train_arrival_destination, arrival_time, departure_time, train_operator,route_id) => db.one('INSERT INTO train_schedule (train_uid, train_departure_origin, train_arrival_destination, arrival_time, departure_time, train_operator, route_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *', [train_uid, train_departure_origin, train_arrival_destination, arrival_time, departure_time, train_operator, route_id]);
 
+const seedNewSchedule = (train_id, train_uid, train_departure_origin, train_arrival_destination, arrival_time, departure_time, train_operator,route_id) => db.one('INSERT INTO train_schedule (train_id, train_uid, train_departure_origin, train_arrival_destination, arrival_time, departure_time, train_operator, route_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *', [train_id, train_uid, train_departure_origin, train_arrival_destination, arrival_time, departure_time, train_operator, route_id]);
+
 const getSchedulesByRouteIDAndTime = (route_id, departure_time_from, departure_time_to) => db.manyOrNone('SELECT * FROM train_schedule WHERE route_id=$1 AND departure_time BETWEEN $2 AND $3', [route_id, departure_time_from, departure_time_to]);
 
 const getSchedulesByTime = (departure_time_from, departure_time_to) => db.manyOrNone('SELECT * FROM train_schedule WHERE departure_time BETWEEN $1 AND $2', [departure_time_from, departure_time_to]);
@@ -27,4 +29,4 @@ const deleteSchedule = (train_id) => db.query('DELETE FROM performance WHERE tra
    
 
 
-module.exports = {deleteSchedule, getSchedulesWithStationByTime, getSchedulesAndRoutesByTime, getSchedulesByTime, getSchedulesByRouteIDAndTime, getSchedulesByRouteID, getScheduleFromToDepTime, postNewSchedule, getAllSchedules, getScheduleById, getScheduleByDepTime};
+module.exports = {seedNewSchedule, deleteSchedule, getSchedulesWithStationByTime, getSchedulesAndRoutesByTime, getSchedulesByTime, getSchedulesByRouteIDAndTime, getSchedulesByRouteID, getScheduleFromToDepTime, postNewSchedule, getAllSchedules, getScheduleById, getScheduleByDepTime};
