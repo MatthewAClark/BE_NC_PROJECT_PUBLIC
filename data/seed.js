@@ -9,10 +9,10 @@ const { seedNewStatus } = require('../models/db.status.js');
 
 
 //const seedData = () => {
-const stations = (readjson.sync('./data/development/stations.json'));
-const routes = (readjson.sync('./data/development/routes.json'));
-const schedules = (readjson.sync('./data/development/schedules.json'));
-const status = (readjson.sync('./data/development/status.json'));
+const stations = (readjson.sync(`./data/${process.env.NODE_ENV}/stations.json`));
+const routes = (readjson.sync(`./data/${process.env.NODE_ENV}/routes.json`));
+const schedules = (readjson.sync(`./data/${process.env.NODE_ENV}/schedules.json`));
+const status = (readjson.sync(`./data/${process.env.NODE_ENV}/status.json`));
 
 //const delays = (readjson.sync('./data/delay_data/allDelays.json'));
 

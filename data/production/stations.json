@@ -1,0 +1,20 @@
+[
+    {
+        "station_id": 1,
+        "station_name": "Newton Abbot",
+        "station_code": "NTA",
+        "user_station_type": null
+    },
+    {
+        "station_id": 2,
+        "station_name": "Exeter St David's",
+        "station_code": "EXD",
+        "user_station_type": null
+    },
+    {
+        "station_id": 3,
+        "station_name": "Leeds",
+        "station_code": "LDS",
+        "user_station_type": null
+    }
+]

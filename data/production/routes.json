@@ -1,0 +1,17 @@
+[
+    {
+        "route_id": 2,
+        "starting_station": 2,
+        "finish_station": 1
+    },
+    {
+        "route_id": 1,
+        "starting_station": 1,
+        "finish_station": 2
+    },
+    {
+        "route_id": 3,
+        "starting_station": 3,
+        "finish_station": 2
+    }
+]

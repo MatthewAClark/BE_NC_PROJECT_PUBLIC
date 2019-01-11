@@ -5,6 +5,7 @@ DS_Store
 /config/api.config.js
 /config/dev.js
 /config/test.js
-/data
+/data/dev
+/data/test
 *.env
 .eslintrc.js
